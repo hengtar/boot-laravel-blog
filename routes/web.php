@@ -25,7 +25,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
     //文章管理
     Route::group(['prefix' => 'article',], function () {
 
-        Route::get('/index', 'ArticleController@index')->name('article-index');
+        Route::get('/index', 'ArticleController@index')->name('article-index')->middleware(FormatArticle::class);
 
 
 

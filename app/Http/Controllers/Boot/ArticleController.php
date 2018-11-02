@@ -9,6 +9,10 @@
 namespace App\Http\Controllers\Boot;
 
 
+use App\Models\Article;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\DocBlock\Tags\Reference\Url;
 class ArticleController extends CommonController
 {
     /**
@@ -19,7 +23,11 @@ class ArticleController extends CommonController
     public function index()
     {
 
-       return view('boot.article.index');
+       $articles = Article::Paginate(2);
+
+       return view('boot.article.index', [
+           'articles' => $articles,
+           ]);
     }
 
     /**

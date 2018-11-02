@@ -25,7 +25,6 @@
                                 </a>
                             </div>
                         </div>
-
                         <form name="admin_list_sea" class="form-search" method="post" action="">
                             <div class="col-sm-3">
                                 <div class="input-group" style="width: 270px">
@@ -52,27 +51,26 @@
                                     <th>所属分类</th>
                                     <th>文章封面</th>
                                     <th width="10%">发布时间</th>
-
                                     <th>浏览量</th>
                                     <th>状态</th>
                                     <th>推荐位置</th>
                                     <th>操作</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @foreach($articles as $article)
                                 <tr>
                                     <th><input type="checkbox"></th>
                                     <td ><input type="text" value="0" name="sort-9404" class="form-control" id="sort_id" param="9404"></td>
-                                    <th>9404</th>
-                                    <td>充值协议</td>
-                                    <td>世界看点</td>
+                                    <th>{{ $article -> id }}</th>
+                                    <td>{{ $article -> title }}</td>
+                                    <td>{{ $article -> c_id }}</td>
                                     <td>
-                                        <img src="http://bvrcn.oss-cn-beijing.aliyuncs.com/8272c00ed2d54a208fffdc6f35dd98cfed9569bc.jpeg" height="30" width="80">
+                                        <img src="{{ $article -> photo }}" height="30" width="80">
                                     </td>
-                                    <td>2018-11-02 10:19:35</td>
+                                    <td>{{ $article -> create_at }}</td>
 
-                                    <td>531</td>
+                                    <td>{{ $article -> views }}</td>
                                     <td>
                                         <a class="btn btn-danger btn-outline btn-xs statusArtciel" id="status-9404">
                                             <i class="fa fa-hand-o-down"></i> 已关闭
@@ -80,7 +78,7 @@
 
                                     </td>
                                     <td>
-                                       热点活动
+                                        {{ $article -> recommend }}
                                     </td>
                                     <td>
                                         <a class="btn btn-primary btn-outline btn-xs "
@@ -93,6 +91,7 @@
                                         </a>
                                     </td>
                                 </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                             <div style="text-align: left">
@@ -101,17 +100,14 @@
                                 </td>
                             </div>
                         </form>
-
                     </div>
-
                     <div style="text-align: right">
+                        {{ $articles ->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
     @endsection
 
 

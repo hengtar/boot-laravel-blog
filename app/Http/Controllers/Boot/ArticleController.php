@@ -10,9 +10,11 @@ namespace App\Http\Controllers\Boot;
 
 
 use App\Models\Article;
-use Illuminate\Support\Facades\App;
+use App\Models\ArticleCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\DocBlock\Tags\Reference\Url;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+
 class ArticleController extends CommonController
 {
     /**
@@ -23,7 +25,9 @@ class ArticleController extends CommonController
     public function index()
     {
 
-       $articles = Article::Paginate(2);
+       $articles = Article:: with('category')
+                           ->orderBy('created_at','desc')
+                           ->paginate(10);
 
        return view('boot.article.index', [
            'articles' => $articles,
@@ -37,7 +41,14 @@ class ArticleController extends CommonController
      */
     public function create()
     {
-        //
+        $articles = new Article();
+
+        $category = ArticleCategory::all('id','category');
+
+        return view('boot.article.create', [
+            'articles' => $articles,
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -48,7 +59,19 @@ class ArticleController extends CommonController
      */
     public function store(Request $request)
     {
-        //
+        $param = $request ->toArray();
+        
+
+        $param['views']     = rand(100,500);
+        $param['sort']      = 50;
+        $param['tips']      = 'aslkdjflsakdjfk';
+        $param['photo']     = 'aslkdjflsakdjfk';
+
+
+        $data =  Article::create($param);
+        $data -> save();
+
+
     }
 
     /**

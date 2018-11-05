@@ -13,7 +13,7 @@
                     <div class="col-sm-12">
                         <div class="col-sm-2" style="width: 100px">
                             <div class="input-group">
-                                <a href="">
+                                <a href="{{ route('article-create') }}">
                                     <button class="btn btn-outline btn-danger" type="button">添加文章</button>
                                 </a>
                             </div>
@@ -44,8 +44,7 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr class="lzCenter-th">
-                                    <th>选择</th>
-                                    <th width="5%">排序</th>
+                                    <th><input type="checkbox"></th>
                                     <th>ID</th>
                                     <th width="20%">标题</th>
                                     <th>所属分类</th>
@@ -60,26 +59,20 @@
                                 <tbody>
                                 @foreach($articles as $article)
                                 <tr>
-                                    <th><input type="checkbox"></th>
-                                    <td ><input type="text" value="0" name="sort-9404" class="form-control" id="sort_id" param="9404"></td>
+                                    <th><input type="checkbox" ></th>
                                     <th>{{ $article -> id }}</th>
                                     <td>{{ $article -> title }}</td>
-                                    <td>{{ $article -> c_id }}</td>
+                                    <td>{{ $article -> category -> category }}</td>
                                     <td>
-                                        <img src="{{ $article -> photo }}" height="30" width="80">
+                                        <img src="{{ $article -> photo }}" height="30" width="80" onError='this.src="{{ asset('/static/boot/img/no.png') }}"'>
                                     </td>
-                                    <td>{{ $article -> create_at }}</td>
+                                    <td>{{ $article -> created_at }}</td>
 
                                     <td>{{ $article -> views }}</td>
-                                    <td>
-                                        <a class="btn btn-danger btn-outline btn-xs statusArtciel" id="status-9404">
-                                            <i class="fa fa-hand-o-down"></i> 已关闭
-                                        </a>
-
-                                    </td>
-                                    <td>
-                                        {{ $article -> recommend }}
-                                    </td>
+                                    <th>{{ $article -> status($article -> status) }}</th>
+                                    <th>
+                                        {{ $article ->recommend($article -> recommend) }}
+                                    </th>
                                     <td>
                                         <a class="btn btn-primary btn-outline btn-xs "
                                            href="" title="修改">
@@ -94,11 +87,6 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div style="text-align: left">
-                                <td colspan="7">
-                                    <button type="submit" class="btn btn-outline btn-success" >排序</button>
-                                </td>
-                            </div>
                         </form>
                     </div>
                     <div style="text-align: right">

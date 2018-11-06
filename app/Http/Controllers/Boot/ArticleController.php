@@ -9,8 +9,10 @@
 namespace App\Http\Controllers\Boot;
 
 
+use App\Http\Requests\StoreArticle;
 use App\Models\Article;
 use App\Models\ArticleCategory;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
@@ -57,32 +59,22 @@ class ArticleController extends CommonController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreArticle $request)
     {
         $param = $request ->toArray();
-        
 
-        $param['views']     = rand(100,500);
-        $param['sort']      = 50;
+        $param['views']     =  !empty($param['vies']) ? rand(100,500)                     : $param['views'];
+        $param['sort']      =  !empty($param['sort']) ? 50                                : $param['sort'];
+        $param['photo']     =  empty($param['photo']) ? "/static/boot/img/no_img.jpg"    : $param['photo'];
         $param['tips']      = 'aslkdjflsakdjfk';
-        $param['photo']     = 'aslkdjflsakdjfk';
 
 
-        $data =  Article::create($param);
-        $data -> save();
+        $result             =  Article::create($param);
 
+        if ($result -> save()){
 
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+            return response()->json(['success' => true,'url' => route('article-index')]);
+        }
     }
 
     /**
@@ -116,6 +108,23 @@ class ArticleController extends CommonController
      */
     public function destroy($id)
     {
-        //
+        if (Article::destroy($id)){
+            return redirect()->back();
+        }
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteForce($id)
+    {
+        if (Article::forceDelete($id)){
+            return redirect()->back();
+        }
+    }
+
+
 }

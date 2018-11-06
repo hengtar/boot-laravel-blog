@@ -25,13 +25,21 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
     //文章管理
     Route::group(['prefix' => 'article',], function () {
 
-        Route::get('/index', 'ArticleController@index')->name('article-index');
-        Route::get('/create', 'ArticleController@create')->name('article-create');
-        Route::post('/store', 'ArticleController@store')->name('article-store');
-
+        Route::get('index', 'ArticleController@index')->name('article-index');
+        Route::get('create', 'ArticleController@create')->name('article-create');
+        Route::post('store', 'ArticleController@store')->name('article-store');
+        Route::get('destroy/{id}', 'ArticleController@destroy')->name('article-destroy');
 
     });
 
 
 });
+
+Route::group(['namespace' => 'Api', 'prefix' => 'api',], function () {
+
+    Route::post('/upload-localhost', 'UploadController@localhost')->name('upload-localhost');
+
+});
+
+
 

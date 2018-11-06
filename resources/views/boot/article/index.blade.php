@@ -79,7 +79,7 @@
                                             <i class="fa fa-paste"></i>
                                         </a>
                                         |
-                                        <a class="btn btn-warning btn-outline btn-xs delArtciel" title="删除">
+                                        <a href="{{ route('article-destroy',['id' => $article -> id]) }}" class="btn btn-warning btn-outline btn-xs delArtciel" onclick="return confirm('确定删除?');" title="删除">
                                             <i class="fa fa-trash-o" ></i>
                                         </a>
                                     </td>

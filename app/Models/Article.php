@@ -10,13 +10,18 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Article extends Model
 {
+    use SoftDeletes;
+
     protected $table= 'articles';
+    protected $dates= ['deleted_at'];
 
-    protected $guarded = ['test-editormd-html-code'];
-
+//    protected $fillable = ['c_id,status,title,keywords,summary,content,tips,views,author,photo,recommend,'];
+    protected $guarded = ['test-editormd-html-code','file'];
 
     //设置推荐位
     const RECOMMEND_DEFAULT = 0;

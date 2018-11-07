@@ -46,16 +46,16 @@
                         </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="keywords" id="title-field" placeholder="关键词" value="{{ $articles -> title }}">
+                            <input class="form-control" type="text" name="keywords" id="title-field" placeholder="关键词" value="{{ $articles -> keywords }}">
                         </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="author" id="title-field" placeholder="作者" value="{{ $articles -> title }}">
+                            <input class="form-control" type="text" name="author" id="title-field" placeholder="作者" value="{{ $articles -> author }}">
                         </div>
 
                         <div class="field">
                             <textarea class="form-control" type="text" name="summary" id="title-field" placeholder="描述"
-                            >{{ $articles -> title }}</textarea>
+                            >{{ $articles -> summary }}</textarea>
                         </div>
 
                         <div class="field">
@@ -64,7 +64,7 @@
                             <select class="form-control ui search multiple selection tags dropdown  category"
                                     name="c_id">
                                 @foreach($category as $cate)
-                                    <option value="{{ $cate -> id }}">{{ $cate -> category }}</option>
+                                    <option value="{{ $cate -> id }}"  {{ $cate -> id == $articles -> c_id ? 'selected' :''  }}>{{ $cate -> category }}</option>
                                 @endforeach
                             </select>
 
@@ -76,7 +76,7 @@
                             <select class="form-control ui search multiple selection tags dropdown  category"
                                     name="recommend">
                                 @foreach($articles -> recommend() as $recommendKey => $recommendValue)
-                                    <option value="{{ $recommendKey }}">{{ $recommendValue }}</option>
+                                    <option {{ $recommendKey == $articles -> recommend ? 'selected' : '' }} value="{{ $recommendKey }}">{{ $recommendValue }}</option>
                                 @endforeach
                             </select>
 
@@ -85,19 +85,19 @@
                         <div class="field">
                             <div id="test-editormd">
                                 <textarea id="my-editormd-markdown-doc" name="content"
-                                          style="display:none;">{{ $articles -> title }}</textarea>
+                                          style="display:none;">{{ $articles -> content }}</textarea>
                                 <!-- 注意：name属性的值-->
-                                <textarea id="name-code" name="content" style="display:none;">{{ $articles -> title }}</textarea>
+                                <textarea id="name-code" name="content" style="display:none;">{{ $articles -> content }}</textarea>
                             </div>
                         </div>
 
                         <br/>
                         <div class="field">
                             <div class="input-group col-sm-12">
-                                <input type="hidden" id="data_photo" name="photo" >
+                                <input type="hidden" id="data_photo" name="photo" value="{{ $articles -> photo }}">
 
                                 <div id="imgPicker" class="col-sm-2" >选择图片</div>
-                                <img id="img_data" class="col-sm-2" style="margin-top: -5px;" src="{{ asset('/static/boot/img/no_img.jpg') }}"/>
+                                <img id="img_data" class="col-sm-2" style="margin-top: -5px;" src="{{ $articles -> photo }}"/>
                                 <div id="fileList" class="col-sm-8 uploader-list alert alert-info" style="height:69px;">上传状态<p>图片上传建议大小： 1500px  * 1200px</p></div>
                             </div>
 
@@ -121,7 +121,6 @@
                                 <i class="glyphicon glyphicon-pencil"></i>
                                 发布文章
                             </button>
-
                             &nbsp;&nbsp;or&nbsp;&nbsp;
                             <button class="ui button" type="submit" name="subject" value="draft">
                                 <i class="glyphicon glyphicon-file"></i> 保存草稿

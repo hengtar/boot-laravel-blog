@@ -15,11 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+//Boot group
 Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
 
+    //boot index
     Route::get('/', 'IndexController@index');
 
+    //boot show main page
     Route::get('/show', 'IndexController@show')->name('show');
 
     //article group
@@ -27,27 +29,43 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
 
         //index and recover
         Route::get('index/{recover?}', 'ArticleController@index')->name('article-index');
+
         //create
         Route::get('create', 'ArticleController@create')->name('article-create');
+
         //store
         Route::post('store', 'ArticleController@store')->name('article-store');
+
         //destroy
         Route::get('destroy/{id}', 'ArticleController@destroy')->name('article-destroy');
+
         //ForceDelete
         Route::get('ForceDelete/{id}', 'ArticleController@deleteForce')->name('article-ForceDelete');
+
         //restore
         Route::get('restore/{id}', 'ArticleController@restore')->name('article-restore');
+
         //edit
         Route::get('edit/{id}', 'ArticleController@edit')->name('article-edit');
+
+        //update
+        Route::post('update', 'ArticleController@update')->name('article-update');
+
 
     });
 
 
 });
 
+
+//Api group
 Route::group(['namespace' => 'Api', 'prefix' => 'api',], function () {
 
+    //upload localhost image
     Route::post('/upload-localhost', 'UploadController@localhost')->name('upload-localhost');
+
+    //upload aliyunOss image
+    Route::post('/upload-aliyun', 'UploadController@aliyun')->name('upload-aliyun');
 
 });
 

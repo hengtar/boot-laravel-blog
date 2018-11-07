@@ -80,7 +80,6 @@ class ArticleController extends CommonController
 
         //save article
         if ($result -> save()){
-
             return response()->json(['success' => true,'url' => route('article-index')]);
         }
     }
@@ -97,7 +96,6 @@ class ArticleController extends CommonController
         $articles = new Article();
 
         //find the id show article info
-
         $articles = $articles ->find($id);
 
         //all category
@@ -116,9 +114,26 @@ class ArticleController extends CommonController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+
+        //get request
+        $param = $request ->toArray();
+
+        //format article key => value
+        $param['views']     =  $param['views'] == null  ? rand(100,500)                      : $param['views'];
+        $param['sort']      =  $param['sort'] == null  ? 50                                 : $param['sort'];
+        $param['photo']     =  $param['photo'] == null ? "/static/boot/img/no_img.jpg"      : $param['photo'];
+        $param['tips']      = 'aslkdjflsakdjfk';
+
+        //create article key => value
+        $article = Article::find($param['id']);
+
+        //save article
+        if ($article -> update($param)){
+
+            return response()->json(['success' => true,'url' => route('article-index')]);
+        }
     }
 
     /**

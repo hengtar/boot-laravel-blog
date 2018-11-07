@@ -21,4 +21,9 @@ class UploadController
 
         return '/'.str_replace('public','storage',$path);
     }
+
+    public function aliyun(Request $request)
+    {
+        
+    }
 }

@@ -1,6 +1,6 @@
 @extends('boot.layouts.base')
 
-@section('title','添加文章')
+@section('title','更改文章')
 
 @section('css')
     <link rel="stylesheet" href="/static/markdown/css/editormd.css">
@@ -35,11 +35,13 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 发布文章
+                        <i class="glyphicon glyphicon-pencil"></i> 编辑文章
                     </div>
-                    <form method="post" action="{{ route('article-store') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('article-update') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
+
+                        <input type="hidden" name="id" value="{{ $articles -> id }}">
 
                         <div class="field">
                             <input class="form-control" type="text" name="title" id="title-field" placeholder="标题" value="{{ $articles -> title }}">
@@ -95,6 +97,7 @@
                         <div class="field">
                             <div class="input-group col-sm-12">
                                 <input type="hidden" id="data_photo" name="photo" value="{{ $articles -> photo }}">
+
 
                                 <div id="imgPicker" class="col-sm-2" >选择图片</div>
                                 <img id="img_data" class="col-sm-2" style="margin-top: -5px;" src="{{ $articles -> photo }}"/>

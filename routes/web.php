@@ -22,13 +22,23 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
 
     Route::get('/show', 'IndexController@show')->name('show');
 
-    //文章管理
+    //article group
     Route::group(['prefix' => 'article',], function () {
 
-        Route::get('index', 'ArticleController@index')->name('article-index');
+        //index and recover
+        Route::get('index/{recover?}', 'ArticleController@index')->name('article-index');
+        //create
         Route::get('create', 'ArticleController@create')->name('article-create');
+        //store
         Route::post('store', 'ArticleController@store')->name('article-store');
+        //destroy
         Route::get('destroy/{id}', 'ArticleController@destroy')->name('article-destroy');
+        //ForceDelete
+        Route::get('ForceDelete/{id}', 'ArticleController@deleteForce')->name('article-ForceDelete');
+        //restore
+        Route::get('restore/{id}', 'ArticleController@restore')->name('article-restore');
+        //edit
+        Route::get('edit/{id}', 'ArticleController@edit')->name('article-edit');
 
     });
 

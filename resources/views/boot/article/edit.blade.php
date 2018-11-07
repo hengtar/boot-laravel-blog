@@ -26,6 +26,7 @@
 @endsection
 
 @section('body')
+
     <div id="error">
 
     </div>
@@ -41,24 +42,21 @@
                         {{ csrf_field() }}
 
                         <div class="field">
-                            <input class="form-control" type="text" name="title" id="title-field" placeholder="标题">
+                            <input class="form-control" type="text" name="title" id="title-field" placeholder="标题" value="{{ $articles -> title }}">
                         </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="keywords" id="title-field" placeholder="关键词"
-                                   >
+                            <input class="form-control" type="text" name="keywords" id="title-field" placeholder="关键词" value="{{ $articles -> title }}">
                         </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="author" id="title-field" placeholder="作者"
-                                  >
+                            <input class="form-control" type="text" name="author" id="title-field" placeholder="作者" value="{{ $articles -> title }}">
                         </div>
 
                         <div class="field">
                             <textarea class="form-control" type="text" name="summary" id="title-field" placeholder="描述"
-                            ></textarea>
+                            >{{ $articles -> title }}</textarea>
                         </div>
-
 
                         <div class="field">
                             <label>文章分类</label>
@@ -87,9 +85,9 @@
                         <div class="field">
                             <div id="test-editormd">
                                 <textarea id="my-editormd-markdown-doc" name="content"
-                                          style="display:none;"></textarea>
+                                          style="display:none;">{{ $articles -> title }}</textarea>
                                 <!-- 注意：name属性的值-->
-                                <textarea id="name-code" name="content" style="display:none;"></textarea>
+                                <textarea id="name-code" name="content" style="display:none;">{{ $articles -> title }}</textarea>
                             </div>
                         </div>
 
@@ -107,14 +105,14 @@
                         <br/>
                         <div class="field">
                             <input class="form-control" type="text" name="views" id="title-field"
-                                   placeholder="浏览量 (默认随机生成 100 - 500)">
+                                   placeholder="浏览量 (默认随机生成 100 - 500)" value="{{ $articles -> title }}">
                         </div>
 
                         <br/>
 
                         <div class="field">
                             <input class="form-control" type="text" name="sort" id="title-field"
-                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)">
+                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $articles -> title }}">
                         </div>
 
                         <br/>

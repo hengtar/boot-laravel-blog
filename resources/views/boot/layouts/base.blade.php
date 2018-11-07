@@ -19,8 +19,6 @@
 @section('body')
 
     @show
-
-
 <script src="{{ asset('/static/boot/js/jquery.min.js') }}"></script>
 <script src="{{ asset('/static/boot/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('/static/boot/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>

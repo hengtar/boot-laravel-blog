@@ -125,9 +125,9 @@
                             </button>
 
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <button class="ui button" type="submit" name="subject" value="draft">
-                                <i class="glyphicon glyphicon-file"></i> 保存草稿
-                            </button>
+                            <a href="{{ route('article-index') }}" class="ui button"  name="subject" value="draft">
+                                <i class="glyphicon glyphicon-repeat"></i> 返回列表
+                            </a>
 
                             <a class="pull-right" href="" target="_blank"
                                style="color: #777;font-size: .9em;margin-top: 8px;">

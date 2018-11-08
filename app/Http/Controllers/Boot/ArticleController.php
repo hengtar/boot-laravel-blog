@@ -13,7 +13,7 @@ use App\Http\Requests\StoreArticle;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use Illuminate\Http\Request;
-
+use Mockery\Exception;
 
 class ArticleController extends CommonController
 {
@@ -22,21 +22,61 @@ class ArticleController extends CommonController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($recover = false)
+    public function index($recover = false, $type = null, $order = null, Request $request)
     {
+        switch ($request->method()){
+
+        }c
+
         //default article list
         $articles = Article:: with('category')->orderBy('created_at','desc')->paginate(10);
 
         //if is recover list
         if ($recover == true){
-            $articles = Article::onlyTrashed()->orderBy('created_at','desc')->paginate(10);
+            //count attribute and order
+            if ($type !== null && $order !== null){
+                $articles = Article::onlyTrashed()->orderBy($type,$order)->paginate(10);
+            }else{
+                $articles = Article::onlyTrashed()->orderBy('created_at','desc')->paginate(10);
+            }
+
+        }else{
+            //count attribute and order
+            if ($type !== null && $order !== null){
+                $articles = Article::with('category')->orderBy($type,$order)->paginate(10);
+            }
         }
 
-
        return view('boot.article.index', [
-           'articles' => $articles,
-           'recover' => $recover,
+           'articles'   => $articles,
+           'recover'    => $recover,
+           'order'      => $order,
+           'type'       => $type,
            ]);
+    }
+
+    /**
+     * Sort articles is post
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sort(Request $request)
+    {
+        try {
+            foreach ($request -> sort as $key => $value){
+                if (!is_numeric($value) || strlen($value) > 11){
+                    return redirect() -> back() -> with('error','文章ID：'.$key.'排序值错误');
+                }
+
+                Article::where('id',$key)->update(['sort' => $value]);
+            }
+
+            return redirect() -> back() -> with('success','排序成功');
+
+        } catch (Exception $e) {
+
+            return redirect() -> back() -> with('error','排序失败,请重试!');
+        }
     }
 
     /**
@@ -114,7 +154,7 @@ class ArticleController extends CommonController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(StoreArticle $request)
     {
 
         //get request
@@ -122,8 +162,8 @@ class ArticleController extends CommonController
 
         //format article key => value
         $param['views']     =  $param['views'] == null  ? rand(100,500)                      : $param['views'];
-        $param['sort']      =  $param['sort'] == null  ? 50                                 : $param['sort'];
-        $param['photo']     =  $param['photo'] == null ? "/static/boot/img/no_img.jpg"      : $param['photo'];
+        $param['sort']      =  $param['sort'] == null   ? 50                                 : $param['sort'];
+        $param['photo']     =  $param['photo'] == null  ? "/static/boot/img/no_img.jpg"      : $param['photo'];
         $param['tips']      = 'aslkdjflsakdjfk';
 
         //create article key => value

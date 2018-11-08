@@ -62,28 +62,22 @@
 
                         <div class="field">
                             <label>文章分类</label>
-
                             <select class="form-control ui search multiple selection tags dropdown  category"
                                     name="c_id">
                                 @foreach($category as $cate)
                                     <option value="{{ $cate -> id }}"  {{ $cate -> id == $articles -> c_id ? 'selected' :''  }}>{{ $cate -> category }}</option>
                                 @endforeach
                             </select>
-
                         </div>
-
                         <div class="field">
                             <label>文章推荐位</label>
-
                             <select class="form-control ui search multiple selection tags dropdown  category"
                                     name="recommend">
                                 @foreach($articles -> recommend() as $recommendKey => $recommendValue)
                                     <option {{ $recommendKey == $articles -> recommend ? 'selected' : '' }} value="{{ $recommendKey }}">{{ $recommendValue }}</option>
                                 @endforeach
                             </select>
-
                         </div>
-
                         <div class="field">
                             <div id="test-editormd">
                                 <textarea id="my-editormd-markdown-doc" name="content"
@@ -92,7 +86,6 @@
                                 <textarea id="name-code" name="content" style="display:none;">{{ $articles -> content }}</textarea>
                             </div>
                         </div>
-
                         <br/>
                         <div class="field">
                             <div class="input-group col-sm-12">
@@ -108,14 +101,14 @@
                         <br/>
                         <div class="field">
                             <input class="form-control" type="text" name="views" id="title-field"
-                                   placeholder="浏览量 (默认随机生成 100 - 500)" value="{{ $articles -> title }}">
+                                   placeholder="浏览量 (默认随机生成 100 - 500)" value="{{ $articles -> views }}">
                         </div>
 
                         <br/>
 
                         <div class="field">
                             <input class="form-control" type="text" name="sort" id="title-field"
-                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $articles -> title }}">
+                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $articles -> sort }}">
                         </div>
 
                         <br/>
@@ -125,9 +118,9 @@
                                 发布文章
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <button class="ui button" type="submit" name="subject" value="draft">
-                                <i class="glyphicon glyphicon-file"></i> 保存草稿
-                            </button>
+                            <a href="{{ route('article-index') }}" class="ui button"  name="subject" value="draft">
+                                <i class="glyphicon glyphicon-repeat"></i> 返回列表
+                            </a>
 
                             <a class="pull-right" href="" target="_blank"
                                style="color: #777;font-size: .9em;margin-top: 8px;">

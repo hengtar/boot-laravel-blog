@@ -28,7 +28,10 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
     Route::group(['prefix' => 'article',], function () {
 
         //index and recover
-        Route::get('index/{recover?}', 'ArticleController@index')->name('article-index');
+        Route::match(['get','post'],'index/{recover?}/{type?}/{order?}', 'ArticleController@index')->name('article-index');
+
+        //article sort
+        Route::post('sort', 'ArticleController@sort')->name('article-sort');
 
         //create
         Route::get('create', 'ArticleController@create')->name('article-create');

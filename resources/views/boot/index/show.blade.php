@@ -35,7 +35,6 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>联系信息</h5>
-
                 </div>
                 <div class="ibox-content">
                     <p><i class="fa fa-send-o"></i> 博客：<a href="http://www.boot-z.com" target="_blank">http://www.boot-z.com</a>

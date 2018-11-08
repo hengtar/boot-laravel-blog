@@ -20,8 +20,7 @@ class Article extends Model
     protected $table= 'articles';
     protected $dates= ['deleted_at'];
 
-//    protected $fillable = ['c_id,status,title,keywords,summary,content,tips,views,author,photo,recommend,'];
-    protected $guarded = ['test-editormd-html-code','file'];
+    protected $fillable = ['id','c_id','status','title','keywords','summary','content','tips','views','author','photo','recommend','sort'];
 
     //设置推荐位
     const RECOMMEND_DEFAULT = 0;
@@ -89,10 +88,6 @@ class Article extends Model
     {
         return $this->hasOne('App\Models\ArticleCategory','id','c_id');
     }
-
-
-
-
 
 
 }

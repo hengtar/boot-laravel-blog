@@ -1,6 +1,6 @@
 @extends('boot.layouts.base')
 
-@section('title','文章列表')
+@section('title','文章分类列表')
 @section('css')
     <style>
         .alert {
@@ -16,15 +16,15 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>文章列表 {{ $recover == false ? "" : "/ 文章回收站"}}</h5>
+                <h5>文章分类列表 {{ $recover == false ? "" : "/ 文章分类回收站"}}</h5>
             </div>
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="col-sm-2" style="width: 100px">
                             <div class="input-group">
-                                <a href="{{ route('article-create') }}">
-                                    <button class="btn btn-outline btn-danger" type="button">添加文章</button>
+                                <a href="{{ route('category-create') }}">
+                                    <button class="btn btn-outline btn-danger" type="button">添加分类</button>
                                 </a>
                             </div>
                         </div>
@@ -44,12 +44,12 @@
                         <div class="col-sm-2" style="width: 100px">
                             <div class="input-group">
                                 @if ($recover == false)
-                                    <a href="{{ route('article-index',['recover' => true]) }}">
+                                    <a href="{{ route('category-index',['recover' => true]) }}">
                                         <button class="btn  btn-default" type="button"><i class="fa fa-trash-o"></i> 回收站
                                         </button>
                                     </a>
                                 @else
-                                    <a href="{{ route('article-index') }}">
+                                    <a href="{{ route('category-index') }}">
                                         <button class="btn  btn-info" type="button"><i class="fa fa-list-alt"></i>
                                             &nbsp;列 表
                                         </button>
@@ -75,79 +75,61 @@
                 <div class="hr-line-dashed"></div>
                 <div class="example-wrap">
                     <div class="example">
-                        <form method="post" action="{{ route('article-sort') }}">
+                        <form method="post" action="{{ route('category-sort') }}">
                             {{ csrf_field() }}
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
                                     <th width="3%"><input type="checkbox" name="chk_all" id="chk_all"/></th>
                                     <th width="5%" class="center"><a
-                                                href="{{ route('article-index', $articleOrm ->attributes($recover,'sort',$order,$search)) }}">排序</a>
+                                                href="{{ route('category-index', $categoryOrm ->attributes($recover,'sort',$order,$search)) }}">排序</a>
                                     </th>
                                     <th width="5%"><a
-                                                href="{{ route('article-index', $articleOrm ->attributes($recover,'id',$order,$search)) }}">ID</a>
+                                                href="{{ route('category-index', $categoryOrm ->attributes($recover,'id',$order,$search)) }}">ID</a>
                                     </th>
-                                    <th>标题</th>
-                                    <th width="8%"><a
-                                                href="{{ route('article-index', $articleOrm ->attributes($recover,'c_id',$order,$search)) }}">所属分类</a>
+                                    <th>分类名称</th>
+                                    <th width="15%"><a
+                                                href="{{ route('category-index',$categoryOrm ->attributes($recover,'created_at',$order,$search)) }}">发布时间</a>
                                     </th>
-                                    <th width="8%">文章封面</th>
-                                    <th width="8%"><a
-                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'created_at',$order,$search)) }}">发布时间</a>
+                                    <th width="10%"><a
+                                                href="{{ route('category-index',$categoryOrm ->attributes($recover,'status',$order,$search)) }}">状态</a>
                                     </th>
-                                    <th width="8%"><a
-                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'views',$order,$search)) }}">浏览量</a>
-                                    </th>
-                                    <th width="8%"><a
-                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'status',$order,$search)) }}">状态</a>
-                                    </th>
-                                    <th width="8%"><a
-                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'recommend',$order,$search)) }}">推荐位置</a>
-                                    </th>
+
                                     <th width="8%">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($articles as $article)
+                                    @foreach($categorys as $category)
                                         <tr>
                                             <td>
                                                 <input type="checkbox" name="chk_list" class="chk_list"
-                                                       id="chk_list_{{ $article -> id }}" value="{{ $article -> id }}"/>
+                                                       id="chk_list_{{ $category -> id }}" value="{{ $category -> id }}"/>
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control center"
-                                                       name="sort[{{ $article -> id }}]" value="{{ $article -> sort }}">
+                                                       name="sort[{{ $category -> id }}]" value="{{ $category -> sort }}">
                                             </td>
-                                            <th>{{ $article -> id }}</th>
-                                            <td>{{ $article -> title }}</td>
-                                            <td>{{ $article -> category -> category }}</td>
-                                            <td>
-                                                <img src="{{ $article -> photo }}" height="30" width="80"
-                                                     onError='this.src="{{ asset('/static/boot/img/no.png') }}"'>
-                                            </td>
-                                            <td>{{ $article -> created_at }}</td>
+                                            <th>{{ $category -> id }}</th>
+                                            <td>{{ $category -> category }}</td>
+                                            <td>{{ $category -> created_at }}</td>
+                                            <th>{{ $category -> status($category -> status) }}</th>
 
-                                            <td>{{ $article -> views }}</td>
-                                            <th>{{ $article -> status($article -> status) }}</th>
-                                            <th>
-                                                {{ $article ->recommend($article -> recommend) }}
-                                            </th>
                                             <td>
                                                 @if ($recover == false)
                                                     <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('article-edit',['id' => $article->id ]) }}"
+                                                       href="{{ route('category-edit',['id' => $category->id ]) }}"
                                                        title="编辑">
                                                         <i class="fa fa-paste"></i>
                                                     </a>
                                                 @else
                                                     <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('article-restore',['id' => $article -> id]) }}"
+                                                       href="{{ route('category-restore',['id' => $category -> id]) }}"
                                                        onclick="return confirm('确定恢复?');" title="恢复">
                                                         <i class="fa fa-undo"></i>
                                                     </a>
                                                 @endif
                                                 <span>|</span>
-                                                <a href="{{ $recover == false ? route('article-destroy',['id' => $article -> id]) : route('article-ForceDelete',['id' => $article -> id])}}"
+                                                <a href="{{ $recover == false ? route('category-destroy',['id' => $category -> id]) : route('category-ForceDelete',['id' => $category -> id])}}"
                                                    class="btn btn-warning btn-outline btn-xs delArtciel"
                                                    onclick="return confirm('确定删除?');" title="删除">
                                                     <i class="fa fa-trash-o"></i>
@@ -165,7 +147,7 @@
                                     <button class="btn btn-outline btn-success" type="submit">排序</button>
                                 </div>
                                 <div style="float: right">
-                                    {{ $articles ->links() }}
+                                    {{ $categorys ->links() }}
                                 </div>
                             </div>
 
@@ -210,7 +192,7 @@
             }
 
             if (confirm('确定批量删除?')) {
-                window.location.href = "{{ route('article-destroy',['id' => '']) }}/" + deleteId;
+                window.location.href = "{{ route('category-destroy',['id' => '']) }}/" + deleteId;
             } else {
                 return false;
             }
@@ -232,7 +214,7 @@
             }
 
             if (confirm('确定批量删除?')) {
-                window.location.href = "{{ route('article-ForceDelete',['id' => '']) }}/" + deleteId;
+                window.location.href = "{{ route('category-ForceDelete',['id' => '']) }}/" + deleteId;
             } else {
                 return false;
             }
@@ -247,7 +229,7 @@
                 return false;
             }
 
-            window.location.href = "{{ route('article-index') }}/{{ $recover == false ? 0 : 1 }}/0/0/" + search;
+            window.location.href = "{{ route('category-index') }}/{{ $recover == false ? 0 : 1 }}/0/0/" + search;
         }
     </script>
 @endsection

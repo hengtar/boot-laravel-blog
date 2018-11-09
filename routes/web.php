@@ -54,9 +54,39 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
         //update
         Route::post('update', 'ArticleController@update')->name('article-update');
 
-
     });
 
+    //category group
+    Route::group(['prefix' => 'category',], function () {
+
+        //index and recover
+        Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'CategoryController@index')->name('category-index');
+
+        //article sort
+        Route::post('sort', 'CategoryController@sort')->name('category-sort');
+
+        //create
+        Route::get('create', 'CategoryController@create')->name('category-create');
+
+        //store
+        Route::post('store', 'CategoryController@store')->name('category-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'CategoryController@destroy')->name('category-destroy');
+
+        //ForceDelete
+        Route::get('ForceDelete/{id}', 'CategoryController@deleteForce')->name('category-ForceDelete');
+
+        //restore
+        Route::get('restore/{id}', 'CategoryController@restore')->name('category-restore');
+
+        //edit
+        Route::get('edit/{id}', 'CategoryController@edit')->name('category-edit');
+
+        //update
+        Route::post('update', 'CategoryController@update')->name('category-update');
+
+    });
 
 });
 

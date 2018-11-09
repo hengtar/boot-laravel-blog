@@ -15,9 +15,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 
-class ArticleController extends CommonController
+class CategoryController extends CommonController
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -27,18 +26,13 @@ class ArticleController extends CommonController
     {
 
         //builder
-        $builder = Article::query();
+        $builder = Category::query();
 
         //recover status
         if ($recover) {
             $builder->onlyTrashed();
-        } else {
-            $builder->with(['category' => function($query){
-                $query -> select('id','category');
-            }]);
         }
 
-        //dd($builder);
         //order
         if ($type && $order) {
             $builder->orderBy($type, $order);
@@ -48,16 +42,17 @@ class ArticleController extends CommonController
 
         //search
         if ($search) {
-            $builder->where('title', 'like', '%' . $search . '%');
+            $builder->where('category', 'like', '%' . $search . '%');
         }
 
         //article value
-        $articles = $builder->paginate(10);
+        $categorys = $builder->paginate(10);
 
 
-        return view('boot.article.index', [
-            'articleOrm' => new Article(),
-            'articles' => $articles,
+
+        return view('boot.category.index', [
+            'categoryOrm' => new Category(),
+            'categorys' => $categorys,
             'recover' => $recover,
             'search' => $search,
             'order' => $order,
@@ -72,13 +67,15 @@ class ArticleController extends CommonController
      */
     public function sort(Request $request)
     {
+
         try {
             foreach ($request->sort as $key => $value) {
                 if (!is_numeric($value) || strlen($value) > 11) {
                     return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
                 }
 
-                Article::withTrashed()->where('id', $key)->update(['sort' => $value]);
+
+                Category::withTrashed()->where('id', $key)->update(['sort' => $value]);
             }
 
             return redirect()->back()->with('success', '排序成功!');
@@ -97,12 +94,12 @@ class ArticleController extends CommonController
     public function create()
     {
         //view show recommend and status
-        $articles = new Article();
+        $articles = new Category();
 
         //all category
         $category = Category::all('id', 'category');
 
-        return view('boot.article.create', [
+        return view('boot.category.create', [
             'articles' => $articles,
             'category' => $category,
         ]);
@@ -126,7 +123,7 @@ class ArticleController extends CommonController
         $param['tips']  = 'aslkdjflsakdjfk';
 
         //create article key => value
-        $result = Article::create($param);
+        $result = Category::create($param);
 
         //save article
         if ($result->save()) {
@@ -151,7 +148,7 @@ class ArticleController extends CommonController
         //all category
         $category = Category::all('id', 'category');
 
-        return view('boot.article.edit', [
+        return view('boot.category.edit', [
             'articles' => $articles,
             'category' => $category,
         ]);
@@ -177,7 +174,7 @@ class ArticleController extends CommonController
         $param['tips']  = 'aslkdjflsakdjfk';
 
         //create article key => value
-        $article = Article::find($param['id']);
+        $article = Category::find($param['id']);
 
         //save article
         if ($article->update($param)) {
@@ -198,7 +195,7 @@ class ArticleController extends CommonController
         $id = FormatDelete($id);
 
         // databases operating
-        if (Article::destroy($id)) {
+        if (Category::destroy($id)) {
 
             return redirect()->back()->with('success', '删除成功！');
         } else {
@@ -219,7 +216,7 @@ class ArticleController extends CommonController
         $id = FormatDelete($id);
 
         // databases operating
-        if (Article::withTrashed()->whereIn('id', $id)->forceDelete()) {
+        if (Category::withTrashed()->whereIn('id', $id)->forceDelete()) {
             return redirect()->back()->with('success', '永久删除成功！');
         } else {
             return redirect()->back()->with('error', '永久删除失败！');
@@ -236,7 +233,7 @@ class ArticleController extends CommonController
     public function restore($id)
     {
         //find the id article
-        $article = Article::withTrashed()->find($id);
+        $article = Category::withTrashed()->find($id);
 
         //restore the id article
         if ($article->restore()) {

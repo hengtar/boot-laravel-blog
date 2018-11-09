@@ -86,8 +86,6 @@ class Article extends Model
 
 
 
-
-
     /**
      * [category]
      * @Notes  : [ 关联分类 ]
@@ -97,7 +95,7 @@ class Article extends Model
      */
     public function category()
     {
-        return $this->hasOne('App\Models\ArticleCategory','id','c_id');
+        return $this->hasOne('App\Models\Category','id','c_id')->withTrashed();
     }
 
 

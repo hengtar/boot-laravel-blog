@@ -57,7 +57,7 @@
                             <a class="J_menuItem" href="{{ route('article-index') }}">文章列表</a>
                         </li>
                         <li>
-                            <a class="J_menuItem" href="#">文章分类</a>
+                            <a class="J_menuItem" href="{{ route('category-index') }}">文章分类</a>
                         </li>
                     </ul>
                 </li>

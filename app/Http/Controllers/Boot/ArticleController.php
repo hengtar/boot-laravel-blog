@@ -22,37 +22,42 @@ class ArticleController extends CommonController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($recover = false, $type = null, $order = null, Request $request)
+    public function index($recover = false, $type = null, $order = null, $search = null)
     {
-        switch ($request->method()){
 
-        }c
+        //builder
+        $builder = Article::query();
 
-        //default article list
-        $articles = Article:: with('category')->orderBy('created_at','desc')->paginate(10);
-
-        //if is recover list
-        if ($recover == true){
-            //count attribute and order
-            if ($type !== null && $order !== null){
-                $articles = Article::onlyTrashed()->orderBy($type,$order)->paginate(10);
-            }else{
-                $articles = Article::onlyTrashed()->orderBy('created_at','desc')->paginate(10);
-            }
-
-        }else{
-            //count attribute and order
-            if ($type !== null && $order !== null){
-                $articles = Article::with('category')->orderBy($type,$order)->paginate(10);
-            }
+        //recover status
+        if ($recover) {
+            $builder->onlyTrashed();
+        } else {
+            $builder->with('category');
         }
 
-       return view('boot.article.index', [
-           'articles'   => $articles,
-           'recover'    => $recover,
-           'order'      => $order,
-           'type'       => $type,
-           ]);
+        //order
+        if ($type && $order) {
+            $builder->orderBy($type, $order);
+        } else {
+            $builder->orderBy('created_at', 'desc');
+        }
+
+        //search
+        if ($search) {
+            $builder->where('title', 'like', '%' . $search . '%');
+        }
+
+        //article value
+        $articles = $builder->paginate(10);
+
+        return view('boot.article.index', [
+            'articleOrm' => new Article(),
+            'articles' => $articles,
+            'recover' => $recover,
+            'search' => $search,
+            'order' => $order,
+            'type' => $type,
+        ]);
     }
 
     /**
@@ -63,19 +68,19 @@ class ArticleController extends CommonController
     public function sort(Request $request)
     {
         try {
-            foreach ($request -> sort as $key => $value){
-                if (!is_numeric($value) || strlen($value) > 11){
-                    return redirect() -> back() -> with('error','文章ID：'.$key.'排序值错误');
+            foreach ($request->sort as $key => $value) {
+                if (!is_numeric($value) || strlen($value) > 11) {
+                    return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
                 }
 
-                Article::where('id',$key)->update(['sort' => $value]);
+                Article::withTrashed()->where('id', $key)->update(['sort' => $value]);
             }
 
-            return redirect() -> back() -> with('success','排序成功');
+            return redirect()->back()->with('success', '排序成功!');
 
         } catch (Exception $e) {
 
-            return redirect() -> back() -> with('error','排序失败,请重试!');
+            return redirect()->back()->with('error', '排序失败!');
         }
     }
 
@@ -90,7 +95,7 @@ class ArticleController extends CommonController
         $articles = new Article();
 
         //all category
-        $category = ArticleCategory::all('id','category');
+        $category = ArticleCategory::all('id', 'category');
 
         return view('boot.article.create', [
             'articles' => $articles,
@@ -101,33 +106,33 @@ class ArticleController extends CommonController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreArticle $request)
     {
         //get request
-        $param = $request ->toArray();
+        $param = $request->toArray();
 
         //format article key => value
-        $param['views']     =  $param['views'] == null  ? rand(100,500)                      : $param['views'];
-        $param['sort']      =  $param['sort'] == null  ? 50                                 : $param['sort'];
-        $param['photo']     =  $param['photo'] == null ? "/static/boot/img/no_img.jpg"      : $param['photo'];
-        $param['tips']      = 'aslkdjflsakdjfk';
+        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
+        $param['sort']  = $param['sort']  == null ? 50 : $param['sort'];
+        $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
+        $param['tips']  = 'aslkdjflsakdjfk';
 
         //create article key => value
-        $result             =  Article::create($param);
+        $result = Article::create($param);
 
         //save article
-        if ($result -> save()){
-            return response()->json(['success' => true,'url' => route('article-index')]);
+        if ($result->save()) {
+            return response()->json(['success' => true, 'url' => route('article-index')]);
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -136,10 +141,10 @@ class ArticleController extends CommonController
         $articles = new Article();
 
         //find the id show article info
-        $articles = $articles ->find($id);
+        $articles = $articles->find($id);
 
         //all category
-        $category = ArticleCategory::all('id','category');
+        $category = ArticleCategory::all('id', 'category');
 
         return view('boot.article.edit', [
             'articles' => $articles,
@@ -150,77 +155,69 @@ class ArticleController extends CommonController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(StoreArticle $request)
     {
 
         //get request
-        $param = $request ->toArray();
+        $param = $request->toArray();
 
         //format article key => value
-        $param['views']     =  $param['views'] == null  ? rand(100,500)                      : $param['views'];
-        $param['sort']      =  $param['sort'] == null   ? 50                                 : $param['sort'];
-        $param['photo']     =  $param['photo'] == null  ? "/static/boot/img/no_img.jpg"      : $param['photo'];
-        $param['tips']      = 'aslkdjflsakdjfk';
+        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
+        $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
+        $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
+        $param['tips']  = 'aslkdjflsakdjfk';
 
         //create article key => value
         $article = Article::find($param['id']);
 
         //save article
-        if ($article -> update($param)){
+        if ($article->update($param)) {
 
-            return response()->json(['success' => true,'url' => route('article-index')]);
+            return response()->json(['success' => true, 'url' => route('article-index')]);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //format delete id
-        if (substr( $id, 0, 5 ) === "null,"){
-            $id = str_replace("null,","",$id);
-            $id = rtrim($id, ',');
-        }
-        $id = is_array($id) ? $id : ( is_string($id) ?explode (',',$id) :func_get_args());
+        $id = FormatDelete($id);
 
         // databases operating
-        if (Article::destroy($id)){
+        if (Article::destroy($id)) {
 
-            return redirect()->back()->with('success','删除成功！');
-        }else{
+            return redirect()->back()->with('success', '删除成功！');
+        } else {
 
-            return redirect()->back()->with('error','删除失败！');
+            return redirect()->back()->with('error', '删除失败！');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteForce($id)
     {
         //format delete id
-        if (substr( $id, 0, 5 ) === "null,"){
-            $id = str_replace("null,","",$id);
-            $id = rtrim($id, ',');
-        }
-        $id = is_array($id) ? $id : ( is_string($id) ?explode (',',$id) :func_get_args());
+        $id = FormatDelete($id);
 
         // databases operating
-        if (Article::withTrashed()->whereIn('id',$id)->forceDelete()){
-            return redirect()->back()->with('success','永久删除成功！');
-        }else{
-            return redirect()->back()->with('error','永久删除失败！');
+        if (Article::withTrashed()->whereIn('id', $id)->forceDelete()) {
+            return redirect()->back()->with('success', '永久删除成功！');
+        } else {
+            return redirect()->back()->with('error', '永久删除失败！');
         }
     }
 
@@ -228,7 +225,7 @@ class ArticleController extends CommonController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function restore($id)
@@ -238,11 +235,10 @@ class ArticleController extends CommonController
 
         //restore the id article
         if ($article->restore()) {
-            return redirect()->back()->with('success','恢复成功！');
-        }else{
-            return redirect()->back()->with('error','恢复失败！');
+            return redirect()->back()->with('success', '恢复成功！');
+        } else {
+            return redirect()->back()->with('error', '恢复失败！');
         }
-
     }
 
 

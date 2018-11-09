@@ -73,6 +73,17 @@ class Article extends Model
         return $arr;
     }
 
+    //route
+    public function attributes($recover,$type,$order,$search)
+    {
+        return [
+            'recover'   => $recover == false ? 0 : 1,
+            'type'      => $type,
+            'order'     => $type  && $order == 'desc' ? 'asc' : 'desc',
+            'search'    => $search
+        ];
+    }
+
 
 
 

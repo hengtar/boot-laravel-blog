@@ -57,17 +57,18 @@
                                 @endif
                             </div>
                         </div>
-                        <form name="admin_list_sea" class="form-search col-sm-3" method="post" action="{{ route('article-index') }}">
-                            <div class="col-sm-3">
-                                <div class="input-group" style="width: 270px">
-                                    <input type="text" class="form-control" name="title" value="" placeholder="Search"/>
-                                    {{ csrf_field() }}
-                                    <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Search</button>
+                        <div class="col-sm-3">
+                            <div class="input-group" style="width: 270px">
+                                <input type="text" class="form-control" id="search" name="title" value="{{ $search }}"
+                                       placeholder="Search"/>
+                                <span class="input-group-btn">
+                                    <a onclick="searchArticle()">
+                                          <button class="btn  btn-info" type="button"><i class="fa fa-search"></i> Search</button>
+                                    </a>
                                 </span>
-                                </div>
                             </div>
-                        </form>
+                        </div>
+
                         @include('boot.layouts.prompt')
                     </div>
                 </div>
@@ -81,27 +82,27 @@
                                 <tr>
                                     <th width="3%"><input type="checkbox" name="chk_all" id="chk_all"/></th>
                                     <th width="5%" class="center"><a
-                                                href="{{ route('article-index', ['recover' => $recover == false ? 0 : 1, 'type' => 'sort', 'order' => $type == 'sort' && $order == 'desc' ? 'asc' : 'desc' ]) }}">排序</a>
+                                                href="{{ route('article-index', $articleOrm ->attributes($recover,'sort',$order,$search)) }}">排序</a>
                                     </th>
                                     <th width="5%"><a
-                                                href="{{ route('article-index',['recover' => $recover == false ? 0 : 1, 'type' => 'id', 'order' => $type == 'id' && $order == 'desc' ? 'asc' : 'desc']) }}">ID</a>
+                                                href="{{ route('article-index', $articleOrm ->attributes($recover,'id',$order,$search)) }}">ID</a>
                                     </th>
                                     <th>标题</th>
                                     <th width="8%"><a
-                                                href="{{ route('article-index',['recover' => $recover == false ? 0 : 1, 'type' => 'c_id', 'order' => $type == 'c_id' && $order == 'desc' ? 'asc' : 'desc']) }}">所属分类</a>
+                                                href="{{ route('article-index', $articleOrm ->attributes($recover,'c_id',$order,$search)) }}">所属分类</a>
                                     </th>
                                     <th width="8%">文章封面</th>
                                     <th width="8%"><a
-                                                href="{{ route('article-index',['recover' => $recover == false ? 0 : 1, 'type' => 'created_at', 'order' => $type == 'created_at' && $order == 'desc' ? 'asc' : 'desc']) }}">发布时间</a>
+                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'created_at',$order,$search)) }}">发布时间</a>
                                     </th>
                                     <th width="8%"><a
-                                                href="{{ route('article-index',['recover' => $recover == false ? 0 : 1, 'type' => 'views', 'order' => $type == 'views' && $order == 'desc' ? 'asc' : 'desc']) }}">浏览量</a>
+                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'views',$order,$search)) }}">浏览量</a>
                                     </th>
                                     <th width="8%"><a
-                                                href="{{ route('article-index',['recover' => $recover == false ? 0 : 1, 'type' => 'status', 'order' => $type == 'status' && $order == 'desc' ? 'asc' : 'desc']) }}">状态</a>
+                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'status',$order,$search)) }}">状态</a>
                                     </th>
                                     <th width="8%"><a
-                                                href="{{ route('article-index',['recover' => $recover == false ? 0 : 1, 'type' => 'recommend', 'order' => $type == 'recommend' && $order == 'desc' ? 'asc' : 'desc']) }}">推荐位置</a>
+                                                href="{{ route('article-index',$articleOrm ->attributes($recover,'recommend',$order,$search)) }}">推荐位置</a>
                                     </th>
                                     <th width="8%">操作</th>
                                 </tr>
@@ -212,6 +213,7 @@
                 return false;
             }
         }
+
         //ForceDeleteAll
         function ForceDeleteAll() {
             var deleteId = 'null,';
@@ -232,6 +234,18 @@
             } else {
                 return false;
             }
+        }
+
+
+        function searchArticle() {
+            var search = $('#search').val();
+            if (search == '') {
+                $('.alert.alert-danger').css("display", "block");
+                $('#info').html('暂未输入数据');
+                return false;
+            }
+
+            window.location.href = "{{ route('article-index') }}/{{ $recover == false ? 0 : 1 }}/0/0/" + search;
         }
     </script>
 @endsection

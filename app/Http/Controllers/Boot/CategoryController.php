@@ -8,8 +8,7 @@
 
 namespace App\Http\Controllers\Boot;
 
-
-use App\Http\Requests\StoreArticle;
+use App\Http\Requests\StoreCategory;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -45,18 +44,18 @@ class CategoryController extends CommonController
             $builder->where('category', 'like', '%' . $search . '%');
         }
 
-        //article value
+        //category value
         $categorys = $builder->paginate(10);
 
 
 
         return view('boot.category.index', [
-            'categoryOrm' => new Category(),
-            'categorys' => $categorys,
-            'recover' => $recover,
-            'search' => $search,
-            'order' => $order,
-            'type' => $type,
+            'categoryOrm'   => new Category(),
+            'categorys'     => $categorys,
+            'recover'       => $recover,
+            'search'        => $search,
+            'order'         => $order,
+            'type'          => $type,
         ]);
     }
 
@@ -93,14 +92,10 @@ class CategoryController extends CommonController
      */
     public function create()
     {
-        //view show recommend and status
-        $articles = new Category();
-
         //all category
         $category = Category::all('id', 'category');
 
         return view('boot.category.create', [
-            'articles' => $articles,
             'category' => $category,
         ]);
     }
@@ -111,23 +106,21 @@ class CategoryController extends CommonController
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreArticle $request)
+    public function store(StoreCategory $request)
     {
         //get request
         $param = $request->toArray();
 
-        //format article key => value
-        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
+        //format category key => value
         $param['sort']  = $param['sort']  == null ? 50 : $param['sort'];
         $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
-        $param['tips']  = 'aslkdjflsakdjfk';
 
-        //create article key => value
+        //create category key => value
         $result = Category::create($param);
 
-        //save article
+        //save category
         if ($result->save()) {
-            return response()->json(['success' => true, 'url' => route('article-index')]);
+            return response()->json(['success' => true, 'url' => route('category-index')]);
         }
     }
 
@@ -139,18 +132,15 @@ class CategoryController extends CommonController
      */
     public function edit($id)
     {
-        //view show recommend and status
-        $articles = new Article();
-
-        //find the id show article info
-        $articles = $articles->find($id);
-
         //all category
-        $category = Category::all('id', 'category');
+        $category_list = Category::all('id', 'category');
+
+        //find category info
+        $category = Category::find($id);
 
         return view('boot.category.edit', [
-            'articles' => $articles,
-            'category' => $category,
+            'category'      => $category,
+            'category_list' => $category_list,
         ]);
     }
 
@@ -161,25 +151,23 @@ class CategoryController extends CommonController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreArticle $request)
+    public function update(StoreCategory $request)
     {
 
         //get request
         $param = $request->toArray();
 
-        //format article key => value
-        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
-        $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
+        //format category key => value
+        $param['sort']  = $param['sort']  == null ? 50 : $param['sort'];
         $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
-        $param['tips']  = 'aslkdjflsakdjfk';
 
-        //create article key => value
-        $article = Category::find($param['id']);
+        //create category key => value
+        $Category = Category::find($param['id']);
 
-        //save article
-        if ($article->update($param)) {
+        //save category
+        if ($Category->update($param)) {
 
-            return response()->json(['success' => true, 'url' => route('article-index')]);
+            return response()->json(['success' => true, 'url' => route('category-index')]);
         }
     }
 
@@ -239,12 +227,13 @@ class CategoryController extends CommonController
      */
     public function restore($id)
     {
-        //find the id article
+        //find the id category
         $article = Category::withTrashed()->find($id);
 
-        //restore the id article
+        //restore the id category
         if ($article->restore()) {
             return redirect()->back()->with('success', '恢复成功！');
+
         } else {
             return redirect()->back()->with('error', '恢复失败！');
         }

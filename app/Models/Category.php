@@ -22,7 +22,7 @@ class Category extends Model
 
     protected $dates= ['deleted_at'];
 
-    protected $fillable = ['id','p_id','status','category','sort'];
+    protected $fillable = ['id','p_id','status','keywords','summary','photo','category','sort'];
 
     protected $softCascade = ['article'];
 
@@ -58,6 +58,7 @@ class Category extends Model
         ];
     }
 
+    //use \Askedio\SoftCascade\Traits\SoftCascadeTrait;    使用  protected $softCascade = ['article'];
     public function article()
     {
         return $this->hasOne('App\Models\Article','category_id','id');

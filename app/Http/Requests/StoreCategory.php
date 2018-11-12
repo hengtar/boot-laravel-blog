@@ -24,12 +24,9 @@ class StoreCategory extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:500',
-            'author' => 'required|max:255',
-            'keywords' => 'required|max:500',
-            'summary' => 'required|max:1000',
-            'content' => 'required',
-            'views' => 'numeric|nullable',
+            'category' => 'required|max:500',
+            'keywords' => 'max:500',
+            'summary' => 'max:1000',
             'sort' => 'numeric|nullable',
         ];
     }
@@ -37,16 +34,10 @@ class StoreCategory extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => '文章标题必填',
-            'title.max' => '文章标题最长为500个字符',
-            'author.required' => '文章作者必填',
-            'author.max' => '文章作者最长为255个字符',
-            'keywords.required' => '文章关键词必填',
-            'keywords.max' => '文章关键词最长为255个字符',
-            'summary.required' => '文章描述必填',
-            'summary.max' => '文章描述最长为1000个字符',
-            'content.required' => '文章内容必填',
-            'views.numeric' => '浏览量必须是数字',
+            'category.required' => '分类标题必填',
+            'category.max' => '分类标题最长为500个字符',
+            'keywords.max' => '分类关键词最长为255个字符',
+            'summary.max' => '分类描述最长为1000个字符',
             'sort.numeric' => '排序必须是数字',
         ];
     }

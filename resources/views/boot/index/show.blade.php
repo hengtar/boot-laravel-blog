@@ -66,14 +66,14 @@
                                     <div class="panel-body">
                                         <div class="alert alert-warning">boot-laravel</div>
                                         <ol>
+                                            <li>系统管理模块</li>
                                             <li>权限管理模块</li>
-                                            <li>文章管理默默快</li>
                                             <li>会员管理模块</li>
+                                            <li>菜单管理模块</li>
+                                            <li>文章管理模块</li>
                                             <li>广告管理模块</li>
-                                            <li>升级layer到2.1版本</li>
-                                            <li>升级echarts到2.2.7版本</li>
-                                            <li>升级webuploader到0.1.5版本</li>
-                                            <li>修复网络条件不好情况下，页面加载提示遮挡页面无法操作的问题</li>
+                                            <li>评论管理模块</li>
+                                            <li>数据库管理模块</li>
                                         </ol>
                                     </div>
                                 </div>
@@ -86,22 +86,22 @@
         <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>购买说明</h5>
+                    <h5>赞助我们</h5>
                 </div>
                 <div class="ibox-content">
-                    <p>购买后我可以获得什么？</p>
+                    <p>欢迎赞助我们</p>
                     <ol>
-                        <li>所有源码(未压缩、带注释版本)；</li>
+                        <li>赞助我们之后获取所有源码(未压缩、带注释版本)；</li>
                         <li>说明文档；</li>
-                        <li>免费加入售后群；</li>
+                        <li>加入赞助群；</li>
                         <li>终身免费升级服务；</li>
                         <li>必要的技术支持；</li>
                         <li>付费二次开发服务；</li>
-                        <li>授权许可；</li>
+                        <li>赞助费仅需10.24元</li>
                     </ol>
                     <hr>
                     <div class="alert alert-warning">
-                        付款完成后请及时联系作者，或在付款备注中留下邮箱或QQ，方便作者及时联系您。
+                        赞助费仅需10.24元，赞助完成后请及时联系作者，或在赞助备注中留下邮箱或QQ，方便作者及时联系您。
                     </div>
                 </div>
             </div>

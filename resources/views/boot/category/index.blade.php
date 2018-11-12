@@ -124,14 +124,14 @@
                                                 @else
                                                     <a class="btn btn-primary btn-outline btn-xs "
                                                        href="{{ route('category-restore',['id' => $category -> id]) }}"
-                                                       onclick="return confirm('确定恢复?');" title="恢复">
+                                                       onclick="return confirm('此操作将恢复此分类下所有被删除的数据,确定恢复?');" title="恢复">
                                                         <i class="fa fa-undo"></i>
                                                     </a>
                                                 @endif
                                                 <span>|</span>
                                                 <a href="{{ $recover == false ? route('category-destroy',['id' => $category -> id]) : route('category-ForceDelete',['id' => $category -> id])}}"
                                                    class="btn btn-warning btn-outline btn-xs delArtciel"
-                                                   onclick="return confirm('确定删除?');" title="删除">
+                                                   onclick="return confirm('当前分类下的所有数据都会被删除！！！确定删除?');" title="删除">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
                                             </td>
@@ -191,7 +191,7 @@
                 return false;
             }
 
-            if (confirm('确定批量删除?')) {
+            if (confirm('当前分类下的所有数据都会被删除！！！确定批量删除?')) {
                 window.location.href = "{{ route('category-destroy',['id' => '']) }}/" + deleteId;
             } else {
                 return false;
@@ -213,7 +213,7 @@
                 return false;
             }
 
-            if (confirm('确定批量删除?')) {
+            if (confirm('当前分类下的所有数据都会被删除！！！确定批量删除?')) {
                 window.location.href = "{{ route('category-ForceDelete',['id' => '']) }}/" + deleteId;
             } else {
                 return false;

@@ -120,6 +120,7 @@
                                             </td>
                                             <th>{{ $article -> id }}</th>
                                             <td>{{ $article -> title }}</td>
+
                                             <td>{{ $article -> category -> category }}</td>
                                             <td>
                                                 <img src="{{ $article -> photo }}" height="30" width="80"
@@ -140,9 +141,13 @@
                                                         <i class="fa fa-paste"></i>
                                                     </a>
                                                 @else
-                                                    <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('article-restore',['id' => $article -> id]) }}"
-                                                       onclick="return confirm('确定恢复?');" title="恢复">
+                                                    {{--<a class="btn btn-primary btn-outline btn-xs "--}}
+                                                       {{--href="{{ route('article-restore',['id' => $article -> id]) }}"--}}
+                                                       {{--onclick="return confirm('确定恢复?');" title="恢复">--}}
+                                                        {{--<i class="fa fa-undo"></i>--}}
+                                                    {{--</a>--}}
+
+                                                    <a class="btn btn-primary btn-outline btn-xs " onclick="restore({{ $article->id }})" title="恢复">
                                                         <i class="fa fa-undo"></i>
                                                     </a>
                                                 @endif
@@ -248,6 +253,17 @@
             }
 
             window.location.href = "{{ route('article-index') }}/{{ $recover == false ? 0 : 1 }}/0/0/" + search;
+        }
+
+        function restore(id) {
+            $.get("{{ route('article-restore',['id' => '']) }}/"+id, function(result){
+                if (result.success == false){
+                    $('.alert.alert-danger').css("display", "block");
+                    $('#info').html(result.msg);
+                } else{
+                    location.reload();
+                }
+            });
         }
     </script>
 @endsection

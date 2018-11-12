@@ -38,7 +38,6 @@ class ArticleController extends CommonController
             }]);
         }
 
-        //dd($builder);
         //order
         if ($type && $order) {
             $builder->orderBy($type, $order);
@@ -53,6 +52,8 @@ class ArticleController extends CommonController
 
         //article value
         $articles = $builder->paginate(10);
+
+        //dd($articles);die;
 
 
         return view('boot.article.index', [
@@ -236,14 +237,26 @@ class ArticleController extends CommonController
     public function restore($id)
     {
         //find the id article
-        $article = Article::withTrashed()->find($id);
+        $builder = Article::query();
+        $builder -> withTrashed();
+
+        //validate category deleted
+        $category = Category::withTrashed()->where('id',$builder ->find($id)['category_id'])->first();
 
         //restore the id article
-        if ($article->restore()) {
-            return redirect()->back()->with('success', '恢复成功！');
+        if ($category -> deleted_at) {
+            $result = ['success' => false, 'msg' => '此分类已被删除，如恢复数据，请先恢复分类'];
+
         } else {
-            return redirect()->back()->with('error', '恢复失败！');
+            if ($builder ->restore()){
+                $result = ['success' => true, 'url' => route('article-index'), 'msg' => '成功'];
+
+            }else{
+                $result = ['success' => false, 'url' => route('article-index'), 'msg' => '恢复失败'];
+            }
         }
+
+        return response()->json($result);
     }
 
 

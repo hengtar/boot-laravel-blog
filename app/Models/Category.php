@@ -12,15 +12,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Category extends Model
 {
     use SoftDeletes;
+    use \Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
     protected $table= 'category';
 
     protected $dates= ['deleted_at'];
 
     protected $fillable = ['id','p_id','status','category','sort'];
+
+    protected $softCascade = ['article'];
+
+
 
     //设置分类状态
     const STATUS_ZERO       = 0;
@@ -51,4 +57,13 @@ class Category extends Model
             'search'    => $search
         ];
     }
+
+    public function article()
+    {
+        return $this->hasOne('App\Models\Article','category_id','id');
+
+    }
+
+
+
 }

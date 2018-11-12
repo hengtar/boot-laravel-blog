@@ -64,7 +64,7 @@
                             <label>文章分类</label>
 
                             <select class="form-control ui search multiple selection tags dropdown  category"
-                                    name="c_id">
+                                    name="category_id">
                                 @foreach($category as $cate)
                                     <option value="{{ $cate -> id }}">{{ $cate -> category }}</option>
                                 @endforeach

@@ -212,13 +212,20 @@ class CategoryController extends CommonController
      */
     public function deleteForce($id)
     {
-        //format delete id
-        $id = FormatDelete($id);
+        try {
+            //format delete id
+            $id = FormatDelete($id);
 
-        // databases operating
-        if (Category::withTrashed()->whereIn('id', $id)->forceDelete()) {
+            // databases operating
+            Category::withTrashed()->whereIn('id', $id)->forceDelete();
+            foreach ($id as  $value) {
+                Article::withTrashed()->where('category_id', $value)->forceDelete();
+            }
+
             return redirect()->back()->with('success', '永久删除成功！');
-        } else {
+
+        } catch (Exception $e) {
+
             return redirect()->back()->with('error', '永久删除失败！');
         }
     }

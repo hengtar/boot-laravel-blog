@@ -16,7 +16,7 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>文章分类列表 {{ $recover == false ? "" : "/ 文章分类回收站"}}</h5>
+                <h5>文章分类列表 {{ $recover == false ? "" : "/ 文章分类回收站"}} {{ $search  ? "/ 文章分类搜索" : ""}}</h5>
             </div>
             <div class="ibox-content">
                 <div class="row">
@@ -110,7 +110,7 @@
                                                        name="sort[{{ $category -> id }}]" value="{{ $category -> sort }}">
                                             </td>
                                             <th>{{ $category -> id }}</th>
-                                            <td>{{ $category -> category }}</td>
+                                            <td>{{ $category -> lefthtml }}{{ $category -> category }}</td>
                                             <td>{{ $category -> created_at }}</td>
                                             <th>{{ $category -> status($category -> status) }}</th>
 
@@ -145,9 +145,6 @@
                             <div class="clearfix" style="line-height: 70px; margin-top: -20px;">
                                 <div style="float: left">
                                     <button class="btn btn-outline btn-success" type="submit">排序</button>
-                                </div>
-                                <div style="float: right">
-                                    {{ $categorys ->links() }}
                                 </div>
                             </div>
 

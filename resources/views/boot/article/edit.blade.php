@@ -65,7 +65,7 @@
                             <select class="form-control ui search multiple selection tags dropdown  category"
                                     name="category_id">
                                 @foreach($category as $cate)
-                                    <option value="{{ $cate -> id }}"  {{ $cate -> id == $articles -> category_id ? 'selected' :''  }}>{{ $cate -> category }}</option>
+                                    <option value="{{ $cate -> id }}"  {{ $cate -> id == $articles -> category_id ? 'selected' :''  }}>{{ $cate -> lefthtml }}{{ $cate -> category }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -111,6 +111,17 @@
                                    placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $articles -> sort }}">
                         </div>
 
+                        <br/>
+
+                        <div class="ui segment private-checkbox">
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" class="js-switch" name="status" {{ $articles -> status? "checked" :'' }} style="margin-left: -2px;"/>
+
+                                    <label>是否显示给用户</label>
+                                </div>
+                            </div>
+                        </div>
                         <br/>
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">

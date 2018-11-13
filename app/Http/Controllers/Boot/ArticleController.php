@@ -53,9 +53,6 @@ class ArticleController extends CommonController
         //article value
         $articles = $builder->paginate(10);
 
-        //dd($articles);die;
-
-
         return view('boot.article.index', [
             'articleOrm' => new Article(),
             'articles' => $articles,
@@ -101,7 +98,7 @@ class ArticleController extends CommonController
         $articles = new Article();
 
         //all category
-        $category = Category::all('id', 'category');
+        $category = tree(Category::all('id', 'category','p_id'));
 
         return view('boot.article.create', [
             'articles' => $articles,
@@ -120,11 +117,14 @@ class ArticleController extends CommonController
         //get request
         $param = $request->toArray();
 
+
         //format article key => value
-        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
-        $param['sort']  = $param['sort']  == null ? 50 : $param['sort'];
-        $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
-        $param['tips']  = 'aslkdjflsakdjfk';
+        $param['views']  = $param['views'] == null ? rand(100, 500) : $param['views'];
+        $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
+        $param['photo']  = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
+
+        $param['status'] = empty($param['status'])  ? 0 : 1;
+        $param['tips']   = 'aslkdjflsakdjfk';
 
         //create article key => value
         $result = Article::create($param);
@@ -150,7 +150,7 @@ class ArticleController extends CommonController
         $articles = $articles->find($id);
 
         //all category
-        $category = Category::all('id', 'category');
+        $category = tree(Category::all('id', 'category','p_id'));
 
         return view('boot.article.edit', [
             'articles' => $articles,
@@ -175,6 +175,7 @@ class ArticleController extends CommonController
         $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
         $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
         $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
+        $param['status'] = empty($param['status'])  ? 0 : 1;
         $param['tips']  = 'aslkdjflsakdjfk';
 
         //create article key => value

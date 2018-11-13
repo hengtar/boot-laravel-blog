@@ -60,7 +60,7 @@
                                     name="p_id">
                                 <option value="0">默认顶级</option>
                                 @foreach($category_list as $cate)
-                                    <option value="{{ $cate -> id }}"  {{ $cate -> id == $category -> p_id ? 'selected' :''  }}>{{ $cate -> category }}</option>
+                                    <option value="{{ $cate -> id }}"  {{ $cate -> id == $category -> p_id ? 'selected' :''  }}>{{ $cate -> lefthtml }}{{ $cate -> category }}</option>
                                 @endforeach
                             </select>
 
@@ -84,7 +84,16 @@
                             <input class="form-control" type="text" name="sort" id="title-field"
                                    placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $category -> sort }}">
                         </div>
+                        <br/>
+                        <div class="ui segment private-checkbox">
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" class="js-switch" name="status" {{ $category -> status ? "checked" :'' }} style="margin-left: -2px;"/>
 
+                                    <label>是否显示给用户</label>
+                                </div>
+                            </div>
+                        </div>
                         <br/>
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">

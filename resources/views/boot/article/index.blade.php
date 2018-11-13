@@ -16,7 +16,8 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>文章列表 {{ $recover == false ? "" : "/ 文章回收站"}}</h5>
+
+                <h5>文章列表 {{ $recover == false ? "" : "/ 文章回收站"}} {{ $search  ? "/ 文章搜索" : ""}}</h5>
             </div>
             <div class="ibox-content">
                 <div class="row">

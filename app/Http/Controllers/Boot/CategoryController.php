@@ -45,8 +45,7 @@ class CategoryController extends CommonController
         }
 
         //category value
-        $categorys = $builder->paginate(10);
-
+        $categorys = $recover || $search ?  $builder->get() : tree($builder->get());
 
 
         return view('boot.category.index', [
@@ -93,7 +92,7 @@ class CategoryController extends CommonController
     public function create()
     {
         //all category
-        $category = Category::all('id', 'category');
+        $category = tree(Category::all('id', 'category','p_id'));
 
         return view('boot.category.create', [
             'category' => $category,
@@ -114,6 +113,7 @@ class CategoryController extends CommonController
         //format category key => value
         $param['sort']  = $param['sort']  == null ? 50 : $param['sort'];
         $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
+        $param['status'] = empty($param['status'])  ? 0 : 1;
 
         //create category key => value
         $result = Category::create($param);
@@ -133,7 +133,7 @@ class CategoryController extends CommonController
     public function edit($id)
     {
         //all category
-        $category_list = Category::all('id', 'category');
+        $category_list = tree(Category::all('id', 'category','p_id'));
 
         //find category info
         $category = Category::find($id);
@@ -160,6 +160,7 @@ class CategoryController extends CommonController
         //format category key => value
         $param['sort']  = $param['sort']  == null ? 50 : $param['sort'];
         $param['photo'] = $param['photo'] == null ? "/static/boot/img/no_img.jpg" : $param['photo'];
+        $param['status'] = empty($param['status'])  ? 0 : 1;
 
         //create category key => value
         $Category = Category::find($param['id']);
@@ -181,15 +182,22 @@ class CategoryController extends CommonController
     {
         //format delete id
         $id = FormatDelete($id);
+        foreach ($id as $value){
 
-        // databases operating
-        if (Category::destroy($id)) {
+            if (Category::where('p_id',$value)->first()){
+                return redirect()->back()->with('error', '删除失败！当前ID:' . $value .'还存在下级分类');
+            }else{
+                // databases operating
+                if (Category::destroy($value)) {
 
-            return redirect()->back()->with('success', '删除成功！');
-        } else {
+                    return redirect()->back()->with('success', '删除成功！');
+                } else {
 
-            return redirect()->back()->with('error', '删除失败！');
+                    return redirect()->back()->with('error', '删除失败！');
+                }
+            }
         }
+
     }
 
     /**

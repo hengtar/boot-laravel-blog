@@ -26,3 +26,34 @@ function FormatDelete($id){
 
     return $id;
 }
+
+
+/**
+ * [tree]
+ * @Notes  : [ 无限极分类函数 ]
+ * @Author : [lao.zh-ang] [852952656@qq.com]
+ * @Time   : 2018\11\13 0013 -- 12:51
+ * @param $cate
+ * @param string $lefthtml
+ * @param int $pid
+ * @param int $lvl
+ * @param int $leftpin
+ * @return   array
+ */
+function tree($cate , $lefthtml = ' — — ' , $pid=0 , $lvl=0, $leftpin=0 ){
+
+    $arr=array();
+    foreach ($cate as $v){
+
+
+        if($v['p_id'] == $pid){
+            $v['lvl']=$lvl + 1;
+            $v['leftpin']=$leftpin + 0;
+            $v['lefthtml']=str_repeat($lefthtml,$lvl);
+            $arr[]=$v;
+            $arr= array_merge($arr,tree($cate,$lefthtml,$v['id'],$lvl+1 , $leftpin+20));
+        }
+    }
+
+    return $arr;
+}

@@ -88,6 +88,17 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
 
     });
 
+    //category group
+    Route::group(['prefix' => 'config',], function () {
+
+        //seo
+        Route::get('seo', 'ConfigController@seo')->name('config-seo');
+        Route::post('store', 'ConfigController@store')->name('config-store');
+
+    });
+
+
+
 });
 
 

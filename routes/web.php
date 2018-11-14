@@ -88,6 +88,38 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
 
     });
 
+    //article group
+    Route::group(['prefix' => 'keyword',], function () {
+
+        //index and recover
+        Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'KeywordController@index')->name('keyword-index');
+
+        //keyword sort
+        Route::post('sort', 'KeywordController@sort')->name('keyword-sort');
+
+        //create
+        Route::get('create', 'KeywordController@create')->name('keyword-create');
+
+        //store
+        Route::post('store', 'KeywordController@store')->name('keyword-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'KeywordController@destroy')->name('keyword-destroy');
+
+        //ForceDelete
+        Route::get('ForceDelete/{id}', 'KeywordController@deleteForce')->name('keyword-ForceDelete');
+
+        //restore
+        Route::get('restore/{id}', 'KeywordController@restore')->name('keyword-restore');
+
+        //edit
+        Route::get('edit/{id}', 'KeywordController@edit')->name('keyword-edit');
+
+        //update
+        Route::post('update', 'KeywordController@update')->name('keyword-update');
+
+    });
+
     //category group
     Route::group(['prefix' => 'config',], function () {
 
@@ -95,7 +127,11 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
         Route::get('seo', 'ConfigController@seo')->name('config-seo');
         Route::post('store', 'ConfigController@store')->name('config-store');
 
+        Route::get('admin', 'ConfigController@admin')->name('config-admin');
+
     });
+
+
 
 
 

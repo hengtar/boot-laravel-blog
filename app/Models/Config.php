@@ -8,4 +8,5 @@ class Config extends Model
 {
     protected $table = 'config';
 
+    public $timestamps = false;
 }

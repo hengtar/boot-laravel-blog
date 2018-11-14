@@ -48,22 +48,22 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="fa fa-home"></i>
+                        <i class="fa fa-gear"></i>
                         <span class="nav-label">系统管理</span>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a class="J_menuItem" href="{{ route('article-index') }}">通用</a>
+                            <a class="J_menuItem" href="{{ route('show') }}">通用</a>
                         </li>
                         <li>
-                            <a class="J_menuItem" href="{{ route('category-index') }}">个人中心</a>
+                            <a class="J_menuItem" href="{{ route('config-admin') }}">个人中心</a>
                         </li>
                         <li>
                             <a class="J_menuItem" href="{{ route('config-seo') }}">SEO设置</a>
                         </li>
                         <li>
-                            <a class="J_menuItem" href="{{ route('category-index') }}">热门词库</a>
+                            <a class="J_menuItem" href="{{ route('keyword-index') }}">热门词库</a>
                         </li>
 
                     </ul>
@@ -71,7 +71,7 @@
 
                 <li>
                     <a href="#">
-                        <i class="fa fa-home"></i>
+                        <i class="fa fa-bars"></i>
                         <span class="nav-label">文章管理</span>
                         <span class="fa arrow"></span>
                     </a>

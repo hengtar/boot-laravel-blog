@@ -71,7 +71,7 @@
 
                 <li>
                     <a href="#">
-                        <i class="fa fa-bars"></i>
+                        <i class="fa fa-book"></i>
                         <span class="nav-label">文章管理</span>
                         <span class="fa arrow"></span>
                     </a>
@@ -84,6 +84,58 @@
                         </li>
                     </ul>
                 </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-unlock"></i>
+                        <span class="nav-label">权限管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="#">角色列表</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="#">用户列表</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="#">权限列表</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-bars"></i>
+                        <span class="nav-label">菜单管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="#">前台菜单</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="#">后台菜单</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-photo"></i>
+                        <span class="nav-label">广告管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="#">广告列表</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="#">广告位置</a>
+                        </li>
+                    </ul>
+                </li>
+
 
 
 

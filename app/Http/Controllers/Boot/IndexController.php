@@ -8,6 +8,10 @@
 
 namespace App\Http\Controllers\Boot;
 
+use App\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class IndexController extends CommonController
 {
@@ -16,8 +20,11 @@ class IndexController extends CommonController
         return view('boot.common.common');
     }
 
-    public function show()
+    public function show(Request $request)
     {
+
         return view('boot.index.show');
+
+
     }
 }

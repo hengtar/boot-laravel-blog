@@ -15,17 +15,26 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+
 //Boot group
-Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
+Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => 'auth'], function () {
 
     //boot index
-    Route::get('/', 'IndexController@index');
+    Route::get('/', 'IndexController@index') ;
 
     //boot show main page
     Route::get('/show', 'IndexController@show')->name('show');
 
     //article group
-    Route::group(['prefix' => 'article',], function () {
+    Route::group(['prefix' => 'article'], function () {
 
         //index and recover
         Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'ArticleController@index')->name('article-index');
@@ -54,7 +63,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
         //update
         Route::post('update', 'ArticleController@update')->name('article-update');
 
-    });
+    }) ;
 
     //category group
     Route::group(['prefix' => 'category',], function () {
@@ -131,11 +140,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot',], function () {
 
     });
 
-
-
-
-
-});
+}) ;
 
 
 //Api group
@@ -148,6 +153,3 @@ Route::group(['namespace' => 'Api', 'prefix' => 'api',], function () {
     Route::post('/upload-aliyun', 'UploadController@aliyun')->name('upload-aliyun');
 
 });
-
-
-

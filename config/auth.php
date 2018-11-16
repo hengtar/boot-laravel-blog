@@ -113,7 +113,7 @@ return [
     */
 
     'auth_permission' => [
-        'auth' => true,
+        'auth' => false,
     ],
 
 ];

@@ -140,6 +140,92 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
 
     });
 
+    //user group
+    Route::group(['prefix' => 'user',], function () {
+
+        //index and recover
+        Route::get('index/{type?}/{order?}/{search?}', 'UserController@index')->name('user-index');
+
+        //keyword sort
+        Route::post('sort', 'UserController@sort')->name('user-sort');
+
+        //create
+        Route::get('create', 'UserController@create')->name('user-create');
+
+        //store
+        Route::post('store', 'UserController@store')->name('user-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'UserController@destroy')->name('user-destroy');
+
+        //restore
+        Route::get('restore/{id}', 'UserController@restore')->name('user-restore');
+
+        //edit
+        Route::get('edit/{id}', 'UserController@edit')->name('user-edit');
+
+        //update
+        Route::post('update', 'UserController@update')->name('user-update');
+
+    });
+
+
+    //role group
+    Route::group(['prefix' => 'role',], function () {
+
+        //index and recover
+        Route::get('index/{type?}/{order?}/{search?}', 'RoleController@index')->name('role-index');
+
+        //keyword sort
+        Route::post('sort', 'RoleController@sort')->name('role-sort');
+
+        //create
+        Route::get('create', 'RoleController@create')->name('role-create');
+
+        //store
+        Route::post('store', 'RoleController@store')->name('role-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'RoleController@destroy')->name('role-destroy');
+
+
+        //edit
+        Route::get('edit/{id}', 'RoleController@edit')->name('role-edit');
+
+        //update
+        Route::post('update', 'RoleController@update')->name('role-update');
+
+    });
+
+
+    //role group
+    Route::group(['prefix' => 'permission',], function () {
+
+        //index and recover
+        Route::get('index/{type?}/{order?}/{search?}', 'PermissionController@index')->name('permission-index');
+
+        //keyword sort
+        Route::post('sort', 'PermissionController@sort')->name('permission-sort');
+
+        //create
+        Route::get('create', 'PermissionController@create')->name('permission-create');
+
+        //store
+        Route::post('store', 'PermissionController@store')->name('permission-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'PermissionController@destroy')->name('permission-destroy');
+
+
+        //edit
+        Route::get('edit/{id}', 'PermissionController@edit')->name('permission-edit');
+
+        //update
+        Route::post('update', 'PermissionController@update')->name('permission-update');
+
+    });
+
+
 }) ;
 
 

@@ -99,4 +99,21 @@ return [
         ],
     ],
 
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Auth Permission
+    |--------------------------------------------------------------------------
+    |
+    | You can configure the following attributes for administrative rights.
+    | false : the closing permission control.
+    | true  : the opening permission control.
+    |
+    */
+
+    'auth_permission' => [
+        'auth' => true,
+    ],
+
 ];

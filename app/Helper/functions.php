@@ -57,3 +57,31 @@ function tree($cate , $lefthtml = ' — — ' , $pid=0 , $lvl=0, $leftpin=0 ){
 
     return $arr;
 }
+
+
+function prepareMenu($param)
+{
+    $parent = []; //父类
+    $child = [];  //子类
+
+    foreach($param as $key=>$vo){
+
+        if($vo['parent_id'] == 0){
+            $vo['route'] = '#';
+            $parent[] = $vo;
+        }else{
+            $child[] = $vo;
+        }
+    }
+
+    foreach($parent as $key=>$vo){
+        foreach($child as $k=>$v){
+
+            if($v['parent_id'] == $vo['id']){
+                $parent[$key]['child'][] = $v;
+            }
+        }
+    }
+    unset($child);
+    return $parent;
+}

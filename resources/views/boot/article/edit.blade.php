@@ -235,12 +235,20 @@
             if (res.success === false) {
                 var items = objToArray(res.errors);
                 $("#error").empty();
+
+                if (!res.errors) {
+                    $('#error').append(
+                        "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + res.msg + "</li></ul> </div>"
+
+                    );
+                }
                 items.map(function (value) {
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + value[0] + "</li></ul> </div>"
 
-                );
+                    );
                 })
+
             } else {
                 window.location.href = res.url;
             }

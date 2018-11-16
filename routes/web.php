@@ -25,10 +25,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 //Boot group
-Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => 'auth'], function () {
+Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth','rbac']], function () {
 
     //boot index
-    Route::get('/', 'IndexController@index') ;
+    Route::get('/', 'IndexController@index') ->name('boot');
 
     //boot show main page
     Route::get('/show', 'IndexController@show')->name('show');
@@ -97,7 +97,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => 'auth'],
 
     });
 
-    //article group
+    //keyword group
     Route::group(['prefix' => 'keyword',], function () {
 
         //index and recover

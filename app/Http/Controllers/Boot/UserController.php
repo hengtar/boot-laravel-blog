@@ -23,12 +23,8 @@ class UserController extends CommonController
      */
     public function index($type = null, $order = null, $search = null)
     {
-
-
         //builder
         $builder = User::query();
-
-
 
         //order
         if ($type && $order) {
@@ -44,7 +40,6 @@ class UserController extends CommonController
 
         //User value
         $Users = $builder->paginate(10);
-
 
         return view('boot.user.index', [
             'UserOrm' => new User(),
@@ -68,7 +63,7 @@ class UserController extends CommonController
                     return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
                 }
 
-                User::withTrashed()->where('id', $key)->update(['sort' => $value]);
+                User::where('id', $key)->update(['sort' => $value]);
             }
 
             return redirect()->back()->with('success', '排序成功!');
@@ -104,9 +99,9 @@ class UserController extends CommonController
         $param = $request->toArray();
 
 
+        //dd($param);
         //format User key => value
-        $param['views']  = $param['views'] == null ? rand(100, 500) : $param['views'];
-        $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
+        $param['sort']   = 50;
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
         //create User key => value

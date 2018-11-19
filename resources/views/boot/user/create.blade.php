@@ -63,10 +63,10 @@
                             <label>用户权限</label>
 
                             <select class="form-control ui search multiple selection tags dropdown  category"
-                                    name="category_id">
-
-                                    <option value="111">超级管理员</option>
-
+                                    name="role_id">
+                                    @foreach($roles as $role)
+                                        <option  value="{{ $role -> id }}" >{{ $role -> chinese_name }}</option>
+                                    @endforeach
                             </select>
 
                         </div>

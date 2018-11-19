@@ -31,22 +31,35 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 发布词库
+                        <i class="glyphicon glyphicon-pencil"></i> 添加权限
                     </div>
-                    <form method="post" action="{{ route('keyword-store') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('permission-store') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
 
                         <div class="field">
-                            <input class="form-control" type="text" name="keyword" id="title-field" placeholder="关键词">
+                            <input class="form-control" type="text" name="chinese_name" id="title-field" placeholder="权限名称">
+                        </div>
+                        <div class="field">
+                            <input class="form-control" type="text" name="name" id="title-field" placeholder="权限路由别名">
+                        </div>
+                        <div class="field">
+                            <input class="form-control" type="text" name="guard_name" id="title-field" placeholder="守护者(如没有特殊要求，请勿改动)" value="web">
                         </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="views" id="title-field"
-                                   placeholder="点击量 (默认随机生成 100 - 500)">
-                        </div>
+                            <label>权限级别(Permission Level)</label>
 
-                        <br/>
+                            <select class="form-control ui search multiple selection tags dropdown  category"
+                                    name="p_id">
+                                <option  value="0" > 默认顶级 </option>
+                                @foreach($permissions as $permission)
+                                    <option  value="{{ $permission -> id }}" >{{ $permission -> lefthtml }}{{ $permission -> chinese_name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                        <br>
 
                         <div class="field">
                             <input class="form-control" type="text" name="sort" id="title-field"
@@ -60,7 +73,7 @@
                                 <div class="ui toggle checkbox">
                                     <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
 
-                                    <label>是否显示给用户</label>
+                                    <label>开启权限</label>
                                 </div>
                             </div>
                         </div>
@@ -68,10 +81,10 @@
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                发布词库
+                                确认
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <a href="{{ route('keyword-index') }}" class="ui button"  name="subject" value="draft">
+                            <a href="{{ route('permission-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
                             </a>
                         </div>
@@ -117,7 +130,7 @@
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + value[0] + "</li></ul> </div>"
 
-                );
+                    );
                 })
             } else {
                 window.location.href = res.url;

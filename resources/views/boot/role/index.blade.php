@@ -103,6 +103,12 @@
 
                                             <th>{{ $Role -> status($Role -> status) }}</th>
                                             <td>
+                                                <a class="btn btn-primary btn-outline btn-xs "
+                                                   href="{{ route('role-edit',['id' => $Role->id ]) }}"
+                                                   title="分配权限">
+                                                    <i class="fa fa-lock"></i>
+                                                </a>
+                                                <span>|</span>
                                                     <a class="btn btn-primary btn-outline btn-xs "
                                                        href="{{ route('role-edit',['id' => $Role->id ]) }}"
                                                        title="编辑">

@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 class StoreUser extends FormRequest
 {
@@ -23,9 +26,10 @@ class StoreUser extends FormRequest
      */
     public function rules()
     {
+
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name' => ['required','max:255','string','alpha_num',Rule::unique('users')->ignore($this->get('id'))],
+            'email' => ['required','max:255','string','email',Rule::unique('users')->ignore($this->get('id'))],
             'password' => 'required|string|min:6',
             'true_name' => 'required|max:255',
         ];
@@ -35,6 +39,7 @@ class StoreUser extends FormRequest
     {
         return [
             'name.required' => '用户名必填',
+            'name.unique' => '用户名已存在',
             'name.max' => '用户名最长为255个字符',
             'name.string' => '请填写字符串',
             'email.required' => '邮箱必填',

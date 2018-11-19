@@ -19,7 +19,7 @@ class Permission extends Model
 
 
 
-    protected $fillable = ['id','status','name','guard_name','chinese_name','sort'];
+    protected $fillable = ['id','p_id','status','name','guard_name','chinese_name','sort'];
 
 
     //设置关键词状态

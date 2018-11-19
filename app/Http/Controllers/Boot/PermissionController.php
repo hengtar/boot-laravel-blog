@@ -86,9 +86,11 @@ class PermissionController extends CommonController
      */
     public function create()
     {
+        $permissions = tree(Permission::all('id', 'chinese_name','p_id'));
+
         return view('boot.Permission.create', [
             //view show recommend and status
-            'Permission' => new Permission(),
+            'permissions' => $permissions,
         ]);
     }
 
@@ -103,9 +105,7 @@ class PermissionController extends CommonController
         //get request
         $param = $request->toArray();
 
-
         //format Permission key => value
-        $param['views']  = $param['views'] == null ? rand(100, 500) : $param['views'];
         $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
@@ -114,7 +114,7 @@ class PermissionController extends CommonController
 
         //save Permission
         if ($result->save()) {
-            return response()->json(['success' => true, 'url' => route('Permission-index')]);
+            return response()->json(['success' => true, 'url' => route('permission-index')]);
         }
     }
 

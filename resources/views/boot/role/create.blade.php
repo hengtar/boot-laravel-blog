@@ -31,22 +31,21 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 发布词库
+                        <i class="glyphicon glyphicon-pencil"></i> 添加角色
                     </div>
-                    <form method="post" action="{{ route('keyword-store') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('role-store') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
 
                         <div class="field">
-                            <input class="form-control" type="text" name="keyword" id="title-field" placeholder="关键词">
+                            <input class="form-control" type="text" name="chinese_name" id="title-field" placeholder="角色名称">
                         </div>
-
                         <div class="field">
-                            <input class="form-control" type="text" name="views" id="title-field"
-                                   placeholder="点击量 (默认随机生成 100 - 500)">
+                            <input class="form-control" type="text" name="name" id="title-field" placeholder="角色英文名称">
                         </div>
-
-                        <br/>
+                        <div class="field">
+                            <input class="form-control" type="text" name="guard_name" id="title-field" placeholder="守护者(如没有特殊要求，请勿改动)" value="web">
+                        </div>
 
                         <div class="field">
                             <input class="form-control" type="text" name="sort" id="title-field"
@@ -60,7 +59,7 @@
                                 <div class="ui toggle checkbox">
                                     <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
 
-                                    <label>是否显示给用户</label>
+                                    <label>开启登陆</label>
                                 </div>
                             </div>
                         </div>
@@ -68,10 +67,10 @@
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                发布词库
+                                 确认
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <a href="{{ route('keyword-index') }}" class="ui button"  name="subject" value="draft">
+                            <a href="{{ route('role-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
                             </a>
                         </div>

@@ -39,7 +39,7 @@ class RoleController extends CommonController
 
         //search
         if ($search) {
-            $builder->where('Role', 'like', '%' . $search . '%');
+            $builder->where('name', 'like', '%' . $search . '%');
         }
 
         //Role value
@@ -65,16 +65,12 @@ class RoleController extends CommonController
         try {
             foreach ($request->sort as $key => $value) {
                 if (!is_numeric($value) || strlen($value) > 11) {
-                    return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
+                    return redirect()->back()->with('error', 'ID：' . $key . '排序值错误!');
                 }
-
-                Role::withTrashed()->where('id', $key)->update(['sort' => $value]);
+                Role::where('id', $key)->update(['sort' => $value]);
             }
-
             return redirect()->back()->with('success', '排序成功!');
-
         } catch (Exception $e) {
-
             return redirect()->back()->with('error', '排序失败!');
         }
     }
@@ -86,10 +82,7 @@ class RoleController extends CommonController
      */
     public function create()
     {
-        return view('boot.role.create', [
-            //view show recommend and status
-            'Role' => new Role(),
-        ]);
+        return view('boot.role.create');
     }
 
     /**
@@ -103,9 +96,7 @@ class RoleController extends CommonController
         //get request
         $param = $request->toArray();
 
-
         //format Role key => value
-        $param['views']  = $param['views'] == null ? rand(100, 500) : $param['views'];
         $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
@@ -114,7 +105,7 @@ class RoleController extends CommonController
 
         //save Role
         if ($result->save()) {
-            return response()->json(['success' => true, 'url' => route('Role-index')]);
+            return response()->json(['success' => true, 'url' => route('role-index')]);
         }
     }
 
@@ -126,14 +117,9 @@ class RoleController extends CommonController
      */
     public function edit($id)
     {
-        //view show recommend and status
-        $Role = new Role();
-
-        //find the id show Role info
-        $Role = $Role->find($id);
 
         return view('boot.role.edit', [
-            'Role' => $Role,
+            'role' => Role::find($id),
         ]);
     }
 
@@ -151,7 +137,6 @@ class RoleController extends CommonController
         $param = $request->toArray();
 
         //format Role key => value
-        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
         $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
@@ -162,7 +147,7 @@ class RoleController extends CommonController
         //save Role
         if ($article->update($param)) {
 
-            return response()->json(['success' => true, 'url' => route('Role-index')]);
+            return response()->json(['success' => true, 'url' => route('role-index')]);
         }
     }
 
@@ -179,51 +164,12 @@ class RoleController extends CommonController
 
         // databases operating
         if (Role::destroy($id)) {
-
             return redirect()->back()->with('success', '删除成功！');
-        } else {
 
+        } else {
             return redirect()->back()->with('error', '删除失败！');
+
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteForce($id)
-    {
-        //format delete id
-        $id = FormatDelete($id);
-
-        // databases operating
-        if (Role::withTrashed()->whereIn('id', $id)->forceDelete()) {
-            return redirect()->back()->with('success', '永久删除成功！');
-        } else {
-            return redirect()->back()->with('error', '永久删除失败！');
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function restore($id)
-    {
-        //find the id Role
-        $builder = Role::withTrashed()->find($id);
-
-        if ($builder->restore()) {
-            return redirect()->back()->with('success', '恢复成功！');
-        } else {
-            return redirect()->back()->with('error', '恢复失败！');
-        }
-    }
-
 
 }

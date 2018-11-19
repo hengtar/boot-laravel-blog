@@ -9,9 +9,12 @@
 namespace App\Http\Controllers\Boot;
 
 use App\Http\Requests\StoreUser;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class UserController extends CommonController
 {
@@ -35,7 +38,7 @@ class UserController extends CommonController
 
         //search
         if ($search) {
-            $builder->where('User', 'like', '%' . $search . '%');
+            $builder->where('name', 'like', '%' . $search . '%');
         }
 
         //User value
@@ -60,7 +63,7 @@ class UserController extends CommonController
         try {
             foreach ($request->sort as $key => $value) {
                 if (!is_numeric($value) || strlen($value) > 11) {
-                    return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
+                    return redirect()->back()->with('error', 'ID：' . $key . '排序值错误!');
                 }
 
                 User::where('id', $key)->update(['sort' => $value]);
@@ -84,6 +87,7 @@ class UserController extends CommonController
         return view('boot.user.create', [
             //view show recommend and status
             'User' => new User(),
+            'roles' => $this->getAllRole(),
         ]);
     }
 
@@ -98,19 +102,31 @@ class UserController extends CommonController
         //get request
         $param = $request->toArray();
 
-
-        //dd($param);
         //format User key => value
         $param['sort']   = 50;
         $param['status'] = empty($param['status'])  ? 0 : 1;
+        $param['password'] =bcrypt($param['password']);
 
-        //create User key => value
-        $result = User::create($param);
+        //use transaction add roles and users
 
-        //save User
-        if ($result->save()) {
-            return response()->json(['success' => true, 'url' => route('User-index')]);
+        DB::beginTransaction();
+
+        try{
+            //create User key => value
+            $result = User::create($param);
+            $result->save();
+
+            $auth = ['role_id' => $param['role_id'],'model_type' =>'App\User','model_id' => $result->id];
+            DB::table('model_has_roles')->insert($auth);
+
+            DB::commit();
+        }catch (QueryException $exception){
+            DB::rollBack();
+            return response()->json(['success' => false, 'msg' => '添加失败，请重试！']);
         }
+
+        return response()->json(['success' => true, 'url' => route('user-index')]);
+
     }
 
     /**
@@ -125,10 +141,11 @@ class UserController extends CommonController
         $User = new User();
 
         //find the id show User info
-        $User = $User->find($id);
+        $user = $User->find($id);
 
         return view('boot.user.edit', [
-            'User' => $User,
+            'user' => $user,
+            'roles' => $this->getAllRole(),
         ]);
     }
 
@@ -146,19 +163,31 @@ class UserController extends CommonController
         $param = $request->toArray();
 
         //format User key => value
-        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
-        $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
+        $param['sort']   = 50;
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
+        $userInfo = User::find($param['id']);
 
-        //create User key => value
-        $article = User::find($param['id']);
 
-        //save User
-        if ($article->update($param)) {
+        if ($userInfo -> password !== $param['password']) $param['password'] = bcrypt($param['password']);
 
-            return response()->json(['success' => true, 'url' => route('User-index')]);
+        //use transaction add roles and users
+        DB::beginTransaction();
+
+        try{
+            //create User key => value
+            $userInfo -> update($param);
+
+            $auth = ['role_id' => $param['role_id'],'model_type' =>'App\User'];
+            DB::table('model_has_roles')->where('model_id',$param['id'])->update($auth);
+
+            DB::commit();
+        }catch (QueryException $exception){
+            DB::rollBack();
+            return response()->json(['success' => false, 'msg' => '编辑失败，请重试！']);
         }
+
+        return response()->json(['success' => true, 'url' => route('user-index')]);
     }
 
     /**
@@ -174,7 +203,7 @@ class UserController extends CommonController
 
         // databases operating
         if (User::destroy($id)) {
-
+            DB::table('model_has_roles')->whereIn('model_id',$id)->delete();
             return redirect()->back()->with('success', '删除成功！');
         } else {
 
@@ -182,42 +211,17 @@ class UserController extends CommonController
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteForce($id)
-    {
-        //format delete id
-        $id = FormatDelete($id);
-
-        // databases operating
-        if (User::withTrashed()->whereIn('id', $id)->forceDelete()) {
-            return redirect()->back()->with('success', '永久删除成功！');
-        } else {
-            return redirect()->back()->with('error', '永久删除失败！');
-        }
-    }
-
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * [getAllRole]
+     * @Notes  : [ getAllRole ]
+     * @Author : [lao.zh-ang] [852952656@qq.com]
+     * @Time   : 2018\11\19 0019 -- 15:47
+     * @return   \Illuminate\Support\Collection
      */
-    public function restore($id)
+    public function getAllRole()
     {
-        //find the id User
-        $builder = User::withTrashed()->find($id);
-
-        if ($builder->restore()) {
-            return redirect()->back()->with('success', '恢复成功！');
-        } else {
-            return redirect()->back()->with('error', '恢复失败！');
-        }
+        return DB::table('roles')->get();
     }
 
 

@@ -1,12 +1,9 @@
 @extends('boot.layouts.base')
 
-@section('title','更改文章')
+@section('title','编辑用户')
 
 @section('css')
-    <link rel="stylesheet" href="/static/markdown/css/editormd.css">
     <link rel="stylesheet" href="/static/boot/css/app.css">
-    <link rel="stylesheet" type="text/css" href="/static/webupload/webuploader.css">
-    <link rel="stylesheet" type="text/css" href="/static/webupload/style.css">
     <style>
         .container {
             margin-top: 30px;
@@ -26,7 +23,6 @@
 @endsection
 
 @section('body')
-
     <div id="error">
 
     </div>
@@ -35,40 +31,56 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 编辑词库
+                        <i class="glyphicon glyphicon-pencil"></i> 编辑用户
                     </div>
-                    <form method="post" action="{{ route('keyword-update') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('user-update') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
 
-                        <input type="hidden" name="id" value="{{ $keyword -> id }}">
-
+                        <div class="field">
+                            <input class="form-control" type="text" name="name" id="title-field" placeholder="用户名" value="{{ $user -> name }}">
+                            <input type="hidden" name="id" value="{{ $user -> id }}">
+                        </div>
+                        <div class="field">
+                            <input class="form-control" type="text" name="email" id="email-field" placeholder="邮箱" value="{{ $user -> email }}">
+                        </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="keyword" id="title-field" placeholder="关键词" value="{{ $keyword -> keyword }}">
+                            <label>密码(不改请勿操作)</label>
+                            <input class="form-control" type="password" name="password" id="title-field"
+                                   placeholder="{{ $user -> password }}" value="{{ $user -> password }}">
                         </div>
+
+
 
                         <br/>
                         <div class="field">
-                            <input class="form-control" type="text" name="views" id="title-field"
-                                   placeholder="浏览量 (默认随机生成 100 - 500)" value="{{ $keyword -> views }}">
+                            <input class="form-control" type="text" name="true_name" id="title-field"
+                                   placeholder="用户真实姓名" value="{{ $user -> true_name }}">
                         </div>
 
                         <br/>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="sort" id="title-field"
-                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $keyword -> sort }}">
+                            <label>用户权限</label>
+
+                            <select class="form-control ui search multiple selection tags dropdown  category"
+                                    name="role_id">
+                                @foreach($roles as $role)
+                                    <option value="{{ $role -> id }}" {{ $user->role_id == $role ->id ? 'selected' :'' }}>{{ $role -> chinese_name }}</option>
+                                @endforeach
+                            </select>
+
                         </div>
 
-                        <br/>
+                        <br>
 
                         <div class="ui segment private-checkbox">
                             <div class="field">
                                 <div class="ui toggle checkbox">
-                                    <input type="checkbox" class="js-switch" name="status" {{ $keyword -> status? "checked" :'' }} style="margin-left: -2px;"/>
+                                    <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
 
-                                    <label>是否显示给用户</label>
+                                    <label>开启登陆</label>
                                 </div>
                             </div>
                         </div>
@@ -76,16 +88,11 @@
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                发布文章
+                                确认
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <a href="{{ route('keyword-index') }}" class="ui button"  name="subject" value="draft">
+                            <a href="{{ route('user-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
-                            </a>
-
-                            <a class="pull-right" href="" target="_blank"
-                               style="color: #777;font-size: .9em;margin-top: 8px;">
-                                编辑器使用指南
                             </a>
                         </div>
                     </form>
@@ -98,8 +105,8 @@
 
 @section('js')
     <script src="/static/boot/js/jquery.form.js"></script>
-
     <script type="text/javascript">
+
         function objToArray(array) {
             var arr = [];
             for (var i in array) {
@@ -130,7 +137,7 @@
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + value[0] + "</li></ul> </div>"
 
-                );
+                    );
                 })
             } else {
                 window.location.href = res.url;
@@ -138,6 +145,8 @@
         }
 
     </script>
+
+
 @endsection
 
 

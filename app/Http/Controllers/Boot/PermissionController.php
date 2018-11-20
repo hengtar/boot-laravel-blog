@@ -28,8 +28,6 @@ class PermissionController extends CommonController
         //builder
         $builder = Permission::query();
 
-
-
         //order
         if ($type && $order) {
             $builder->orderBy($type, $order);
@@ -43,12 +41,12 @@ class PermissionController extends CommonController
         }
 
         //Permission value
-        $Permissions = $builder->paginate(10);
+        $Permissions = $builder->get();
 
 
         return view('boot.Permission.index', [
             'PermissionOrm' => new Permission(),
-            'Permissions' => $Permissions,
+            'Permissions' => tree($Permissions),
             'search' => $search,
             'order' => $order,
             'type' => $type,
@@ -126,14 +124,10 @@ class PermissionController extends CommonController
      */
     public function edit($id)
     {
-        //view show recommend and status
-        $Permission = new Permission();
-
-        //find the id show Permission info
-        $Permission = $Permission->find($id);
 
         return view('boot.Permission.edit', [
-            'Permission' => $Permission,
+            'permission'  => Permission::find($id),
+            'permissions' => tree(Permission::all('id', 'chinese_name','p_id'))
         ]);
     }
 
@@ -146,15 +140,12 @@ class PermissionController extends CommonController
      */
     public function update(StorePermission $request)
     {
-
         //get request
         $param = $request->toArray();
 
         //format Permission key => value
-        $param['views'] = $param['views'] == null ? rand(100, 500) : $param['views'];
         $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
-
 
         //create Permission key => value
         $article = Permission::find($param['id']);
@@ -162,7 +153,7 @@ class PermissionController extends CommonController
         //save Permission
         if ($article->update($param)) {
 
-            return response()->json(['success' => true, 'url' => route('Permission-index')]);
+            return response()->json(['success' => true, 'url' => route('permission-index')]);
         }
     }
 
@@ -186,44 +177,5 @@ class PermissionController extends CommonController
             return redirect()->back()->with('error', '删除失败！');
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteForce($id)
-    {
-        //format delete id
-        $id = FormatDelete($id);
-
-        // databases operating
-        if (Permission::withTrashed()->whereIn('id', $id)->forceDelete()) {
-            return redirect()->back()->with('success', '永久删除成功！');
-        } else {
-            return redirect()->back()->with('error', '永久删除失败！');
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function restore($id)
-    {
-        //find the id Permission
-        $builder = Permission::withTrashed()->find($id);
-
-        if ($builder->restore()) {
-            return redirect()->back()->with('success', '恢复成功！');
-        } else {
-            return redirect()->back()->with('error', '恢复失败！');
-        }
-    }
-
 
 }

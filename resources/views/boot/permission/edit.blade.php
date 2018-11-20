@@ -1,12 +1,9 @@
 @extends('boot.layouts.base')
 
-@section('title','更改文章')
+@section('title','添加词库')
 
 @section('css')
-    <link rel="stylesheet" href="/static/markdown/css/editormd.css">
     <link rel="stylesheet" href="/static/boot/css/app.css">
-    <link rel="stylesheet" type="text/css" href="/static/webupload/webuploader.css">
-    <link rel="stylesheet" type="text/css" href="/static/webupload/style.css">
     <style>
         .container {
             margin-top: 30px;
@@ -26,7 +23,6 @@
 @endsection
 
 @section('body')
-
     <div id="error">
 
     </div>
@@ -35,40 +31,47 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 编辑词库
+                        <i class="glyphicon glyphicon-pencil"></i> 编辑权限
                     </div>
-                    <form method="post" action="{{ route('keyword-update') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('permission-update') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
-
-                        <input type="hidden" name="id" value="{{ $keyword -> id }}">
-
+                        <input type="hidden" name="id" value="{{ $permission -> id }}">
 
                         <div class="field">
-                            <input class="form-control" type="text" name="keyword" id="title-field" placeholder="关键词" value="{{ $keyword -> keyword }}">
+                            <input class="form-control" type="text" name="chinese_name" id="title-field" placeholder="权限名称" value="{{ $permission -> chinese_name }}">
                         </div>
-
-                        <br/>
                         <div class="field">
-                            <input class="form-control" type="text" name="views" id="title-field"
-                                   placeholder="浏览量 (默认随机生成 100 - 500)" value="{{ $keyword -> views }}">
+                            <input class="form-control" type="text" name="name" id="title-field" placeholder="权限路由别名" value="{{ $permission -> name }}">
+                        </div>
+                        <div class="field">
+                            <input class="form-control" type="text" name="guard_name" id="title-field" placeholder="守护者(如没有特殊要求，请勿改动)" value="{{ $permission -> guard_name }}">
                         </div>
 
-                        <br/>
+                        <div class="field">
+                            <label>权限级别(Permission Level)</label>
 
+                            <select class="form-control ui search multiple selection tags dropdown  category"
+                                    name="p_id">
+                                <option  value="0" > 默认顶级 </option>
+                                @foreach($permissions as $routes)
+                                    <option value="{{ $routes -> id }}" {{ $routes -> id == $permission -> p_id ? 'selected' : '' }}>{{ $routes -> lefthtml }}{{ $routes -> chinese_name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                        <br>
                         <div class="field">
                             <input class="form-control" type="text" name="sort" id="title-field"
-                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $keyword -> sort }}">
+                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $permission -> sort }}">
                         </div>
-
                         <br/>
-
                         <div class="ui segment private-checkbox">
                             <div class="field">
                                 <div class="ui toggle checkbox">
-                                    <input type="checkbox" class="js-switch" name="status" {{ $keyword -> status? "checked" :'' }} style="margin-left: -2px;"/>
+                                    <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
 
-                                    <label>是否显示给用户</label>
+                                    <label>开启权限</label>
                                 </div>
                             </div>
                         </div>
@@ -76,16 +79,11 @@
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                发布文章
+                                确认
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <a href="{{ route('keyword-index') }}" class="ui button"  name="subject" value="draft">
+                            <a href="{{ route('permission-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
-                            </a>
-
-                            <a class="pull-right" href="" target="_blank"
-                               style="color: #777;font-size: .9em;margin-top: 8px;">
-                                编辑器使用指南
                             </a>
                         </div>
                     </form>
@@ -98,8 +96,8 @@
 
 @section('js')
     <script src="/static/boot/js/jquery.form.js"></script>
-
     <script type="text/javascript">
+
         function objToArray(array) {
             var arr = [];
             for (var i in array) {
@@ -130,7 +128,7 @@
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + value[0] + "</li></ul> </div>"
 
-                );
+                    );
                 })
             } else {
                 window.location.href = res.url;
@@ -138,6 +136,8 @@
         }
 
     </script>
+
+
 @endsection
 
 

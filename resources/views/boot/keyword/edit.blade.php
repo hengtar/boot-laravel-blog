@@ -76,16 +76,11 @@
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                发布文章
+                                确定
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
                             <a href="{{ route('keyword-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
-                            </a>
-
-                            <a class="pull-right" href="" target="_blank"
-                               style="color: #777;font-size: .9em;margin-top: 8px;">
-                                编辑器使用指南
                             </a>
                         </div>
                     </form>

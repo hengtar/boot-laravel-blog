@@ -46,6 +46,7 @@ class UserController extends CommonController
 
         return view('boot.user.index', [
             'UserOrm' => new User(),
+            'RoleOrm' => new \App\Models\Role(),
             'Users' => $Users,
             'search' => $search,
             'order' => $order,

@@ -195,6 +195,10 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
         //update
         Route::post('update', 'RoleController@update')->name('role-update');
 
+        Route::get('auth/{id}', 'RoleController@giveAuth')->name('role-auth');
+
+        Route::post('auth/store', 'RoleController@authStore')->name('role-auth-store');
+
     });
 
 

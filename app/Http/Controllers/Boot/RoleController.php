@@ -9,7 +9,9 @@
 namespace App\Http\Controllers\Boot;
 
 use App\Http\Requests\StoreRole;
+use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use App\Models\Role;
 
@@ -171,5 +173,65 @@ class RoleController extends CommonController
 
         }
     }
+
+
+    public function giveAuth($id)
+    {
+
+        $rolePermissionId =   DB::table('role_has_permissions')->where('role_id',$id)->get();
+
+        $arr = [];
+        foreach ($rolePermissionId as $key => $value){
+            $arr[] = $value->permission_id;
+
+        }
+        $allPermission = Permission::all('id', 'chinese_name','p_id')->toArray();
+        foreach ($allPermission as $k => $v)
+        {
+            foreach ($arr as $item){
+               if ($v['id'] == $item){
+                   unset($allPermission[$k]);
+               }
+            }
+        }
+
+        return view('boot.role.auth', [
+            'role' => Role::find($id),
+            'rolePermission' =>  authMenu(Permission::whereIn('id',$arr)->get()->toArray()),
+            'permissions' => authMenu($allPermission)
+        ]);
+    }
+
+    public function authStore(Request $request)
+    {
+
+        $permission = giveArray(json_decode($request -> string,true));
+        $role_id = $request ->role_id;
+        unset($permission[0]);
+
+        $arr = [];
+        foreach ($permission as $key => $value){
+            $arr[$key]['role_id'] = $role_id;
+            $arr[$key]['permission_id'] = $value;
+        }
+
+        DB::beginTransaction();
+
+        try{
+
+            DB::table('role_has_permissions')->where('role_id',$role_id)->delete();
+            DB::table('role_has_permissions')->insert($arr);
+
+            DB::commit();
+        }catch (QueryException $exception){
+
+            DB::rollBack();
+            return response()->json(['success' => false, 'msg' => '添加失败，请重试！']);
+        }
+
+        return response()->json(['success' => true, 'msg' => '编辑角色权限成功']);
+
+    }
+
 
 }

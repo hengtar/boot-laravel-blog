@@ -94,13 +94,10 @@
                                                        name="sort[{{ $Permission -> id }}]" value="{{ $Permission -> sort }}">
                                             </td>
                                             <th>{{ $Permission -> id }}</th>
-                                            <td>{{ $Permission -> chinese_name }}</td>
-                                            <td>{{ $Permission -> name }}</td>
+                                            <td>{{ $Permission -> lefthtml }}{{ $Permission -> chinese_name }}</td>
+                                            <td>{{ $Permission -> lefthtml }}{{ $Permission -> name }}</td>
                                             <td>{{ $Permission -> guard_name }}</td>
-
-
                                             <td>{{ $Permission -> created_at }}</td>
-
                                             <th>{{ $Permission -> status($Permission -> status) }}</th>
                                             <td>
                                                     <a class="btn btn-primary btn-outline btn-xs "
@@ -125,9 +122,6 @@
                             <div class="clearfix" style="line-height: 70px; margin-top: -20px;">
                                 <div style="float: left">
                                     <button class="btn btn-outline btn-success" type="submit">排序</button>
-                                </div>
-                                <div style="float: right">
-                                    {{ $Permissions ->links() }}
                                 </div>
                             </div>
 

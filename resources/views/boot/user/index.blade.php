@@ -69,6 +69,7 @@
                                     </th>
                                     <th>用户名</th>
                                     <th>邮箱</th>
+                                    <th>角色名称</th>
 
 
                                     <th width="13%"><a
@@ -95,6 +96,7 @@
                                             <th>{{ $User -> id }}</th>
                                             <td>{{ $User -> name }}</td>
                                             <td>{{ $User -> email }}</td>
+                                            <td>{{ $RoleOrm -> getUserChineseName($User -> id) }}</td>
 
 
                                             <td>{{ $User -> created_at }}</td>

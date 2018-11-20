@@ -85,3 +85,41 @@ function prepareMenu($param)
     unset($child);
     return $parent;
 }
+
+
+
+function authMenu($param)
+{
+    $parent = []; //父类
+    $child = [];  //子类
+
+    foreach($param as $key=>$vo){
+
+        if($vo['p_id'] == 0){
+            $parent[] = $vo;
+        }else{
+            $child[] = $vo;
+        }
+    }
+
+    foreach($parent as $key=>$vo){
+        foreach($child as $k=>$v){
+            if($v['p_id'] == $vo['id']){
+                $parent[$key]['child'][] = $v;
+            }
+        }
+    }
+    unset($child);
+    return $parent;
+}
+
+
+function giveArray($array){
+    $return=[];
+    array_walk_recursive($array,function($value,$key)use(&$return){
+        if($key=='id')
+            $return[]=$value;
+    });
+
+    return $return;
+}

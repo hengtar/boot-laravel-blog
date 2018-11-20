@@ -41,11 +41,11 @@ class Rbac
         if (config('auth.auth_permission.auth')){
 
             $user = Auth::user();
-            $user ->assignRole('editor');
             if ($user -> hasRole('super-admin')){
                 $menu = BootMenu::all()->toArray();
             }else {
                 $permissions = $user->getPermissionsViaRoles()->toArray();
+
                 foreach ($permissions as $key => $v) {
                     $permission[] = $v['name'];
                 }
@@ -62,7 +62,6 @@ class Rbac
                     } else {
                         return redirect()->back()->with('error', '您暂未获取当前的操作权限!');
                     }
-
 
             }
 

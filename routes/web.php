@@ -137,6 +137,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
         Route::post('store', 'ConfigController@store')->name('config-store');
 
         Route::get('admin', 'ConfigController@admin')->name('config-admin');
+        Route::post('admin_store', 'ConfigController@admin_store')->name('admin-store');
 
     });
 
@@ -228,6 +229,37 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
         Route::post('update', 'PermissionController@update')->name('permission-update');
 
     });
+
+    //role group
+    Route::group(['prefix' => 'menu',], function () {
+
+        //index and recover
+        Route::get('index/{type?}/{order?}/{search?}', 'MenuController@index')->name('menu-index');
+
+        //keyword sort
+        Route::post('sort', 'MenuController@sort')->name('menu-sort');
+
+        //create
+        Route::get('create', 'MenuController@create')->name('menu-create');
+
+        //store
+        Route::post('store', 'MenuController@store')->name('menu-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'MenuController@destroy')->name('menu-destroy');
+
+
+        //edit
+        Route::get('edit/{id}', 'MenuController@edit')->name('menu-edit');
+
+        //update
+        Route::post('update', 'MenuController@update')->name('menu-update');
+
+    });
+
+
+
+
 
 
 }) ;

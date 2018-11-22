@@ -28,7 +28,7 @@ class StoreUser extends FormRequest
     {
 
         return [
-            'name' => ['required','max:255','string','alpha_num',Rule::unique('users')->ignore($this->get('id'))],
+            'name' => ['required','max:255','string',Rule::unique('users')->ignore($this->get('id'))],
             'email' => ['required','max:255','string','email',Rule::unique('users')->ignore($this->get('id'))],
             'password' => 'required|string|min:6',
             'true_name' => 'required|max:255',

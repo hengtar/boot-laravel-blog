@@ -35,34 +35,36 @@
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
                         <i class="glyphicon glyphicon-pencil"></i> 个人中心
                     </div>
-                    <form method="post" action="{{ route('article-store') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('admin-store') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
 
+                        <input type="hidden" name="id" value="{{ $user -> id }}">
                         <div class="field">
-                            <input class="form-control" type="text" name="title" id="title-field" placeholder="用户名">
+                            <input class="form-control" type="text" name="name"    placeholder="用户名" value="{{ $user -> name }}" >
                         </div>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="title" id="title-field" placeholder="真实姓名">
+                            <input class="form-control" type="text" name="email"  readonly value="{{ $user -> email }}"   placeholder="邮箱">
                         </div>
 
-                        <div class="field">
-                            <input class="form-control" type="text" name="keywords" id="title-field" placeholder="密码">
-                        </div>
 
                         <div class="field">
-                            <textarea class="form-control" type="text" name="summary" id="title-field" placeholder="简介"
-                            ></textarea>
+                            <input class="form-control" type="password" name="password" value="{{ $user -> password }}"  placeholder="密码">
+                        </div>
+
+
+                        <div class="field">
+                            <input class="form-control" type="text" name="true_name" value="{{ $user -> true_name }}"  placeholder="真实姓名">
                         </div>
 
                         <br/>
                         <div class="field">
                             <div class="input-group col-sm-12">
-                                <input type="hidden" id="data_photo" name="photo" >
+                                <input type="hidden" id="data_photo" name="photo" value="{{ $user -> photo }}" >
 
                                 <div id="imgPicker" class="col-sm-2" >选择头像</div>
-                                <img id="img_data" class="col-sm-2" style="margin-top: -5px;" src="{{ asset('/static/boot/img/no_img.jpg') }}"/>
+                                <img id="img_data" class="col-sm-2" style="margin-top: -5px;" src="{{ $user -> photo }}"/>
                                 <div id="fileList" class="col-sm-8 uploader-list alert alert-info" style="height:69px;">上传状态<p>图片上传建议大小： 1500px  * 1200px</p></div>
                             </div>
 
@@ -156,21 +158,28 @@
                 var items = objToArray(res.errors);
                 $("#error").empty();
 
-
                 if (!res.errors) {
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + res.msg + "</li></ul> </div>"
 
                     );
                 }
+
                 items.map(function (value) {
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + value[0] + "</li></ul> </div>"
 
-                );
+                    );
                 })
             } else {
-                window.location.href = res.url;
+                $("#error").empty();
+                $('#error').append(
+                    "<div style='opacity:1;' class='alert alert-success'><ul><li>" + res.msg + "</li></ul> </div>"
+                );
+                window.setTimeout(function () {
+                    window.location.href = res.url;
+                }, 1000);
+
             }
         }
 

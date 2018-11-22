@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Boot;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSeo;
+use App\Http\Requests\StoreUser;
 use App\Models\Config;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 
@@ -42,10 +44,41 @@ class ConfigController extends Controller
         }
     }
 
+    
 
-    public function admin()
+    public function admin(Request $request)
     {
-        return view('boot.config.admin');
+        return view('boot.config.admin',[
+            'user' => $request -> users,
+        ]);
+    }
+
+    public function admin_store(StoreUser $request)
+    {
+        //get request
+        $param = $request->toArray();
+
+
+
+        $userInfo = User::find($param['id']);
+
+
+        if ($userInfo -> password !== $param['password']) $param['password'] = bcrypt($param['password']);
+
+        //use transaction add roles and users
+
+
+
+        if ($userInfo -> update($param)){
+            return response()->json(['success' => true, 'msg' => '编辑成功','url' => route('config-admin')]);
+        }else{
+            return response()->json(['success' => false, 'msg' => '编辑失败，请重试！']);
+        }
+
+
+
+
+
     }
 
 

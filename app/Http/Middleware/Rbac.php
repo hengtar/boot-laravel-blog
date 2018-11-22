@@ -45,10 +45,11 @@ class Rbac
                 $menu = BootMenu::all()->toArray();
             }else {
                 $permissions = $user->getPermissionsViaRoles()->toArray();
-
+                $permission = [];
                 foreach ($permissions as $key => $v) {
                     $permission[] = $v['name'];
                 }
+
 
                 $menu = BootMenu::whereIn('route', $permission)->get()->toArray();
 
@@ -72,6 +73,7 @@ class Rbac
 
 
         $request -> menu  = prepareMenu($menu);
+        $request -> users  = $user;
 
         return $next($request);
     }

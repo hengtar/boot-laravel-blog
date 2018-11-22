@@ -21,27 +21,14 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <span><img alt="image" class="img-circle"
-                                   src="{{ asset('/static/boot/img/profile_small.jpg') }}"/></span>
+                        <span><img alt="image" style="    width: 60px;" class="img-thumbnail"
+                                   src="{{ $user -> photo }}"/></span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
-                                <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
-                                </span>
+
+                               <span class="block m-t-xs"><strong class="font-bold">{{ $user -> true_name }}</strong></span>
+                                <span class="text-muted text-xs block">{{ $user -> email }}</span>
+
                         </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="J_menuItem" href="form_avatar.html">修改头像</a>
-                            </li>
-                            <li><a class="J_menuItem" href="profile.html">个人资料</a>
-                            </li>
-                            <li><a class="J_menuItem" href="contacts.html">联系我们</a>
-                            </li>
-                            <li><a class="J_menuItem" href="mailbox.html">信箱</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="login.html">安全退出</a>
-                            </li>
-                        </ul>
                     </div>
                     <div class="logo-element">B
                     </div>
@@ -106,7 +93,13 @@
                     </li>
                 </ul>
             </div>
-            <a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
         </div>
         <div class="row J_mainContent" id="content-main">
             <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="{{ route('show') }}"

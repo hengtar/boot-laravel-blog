@@ -20,9 +20,10 @@ class IndexController extends CommonController
 
     public function index(Request $request)
     {
-        //dd($request -> menu);
+
         return view('boot.common.common',[
             'menu' => $request -> menu,
+            'user' => $request -> users,
         ]);
     }
 

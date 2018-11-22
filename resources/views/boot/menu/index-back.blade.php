@@ -17,15 +17,15 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
 
-                <h5>角色列表 {{ $search  ? "/ 角色搜索" : ""}}</h5>
+                <h5>后端菜单 {{ $search  ? "/ 菜单搜索" : ""}}</h5>
             </div>
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="col-sm-2" style="width: 100px">
                             <div class="input-group">
-                                <a href="{{ route('role-create') }}">
-                                    <button class="btn btn-outline btn-danger" type="button">添加角色</button>
+                                <a href="{{ route('menu-create') }}">
+                                    <button class="btn btn-outline btn-danger" type="button">添加菜单</button>
                                 </a>
                             </div>
                         </div>
@@ -55,63 +55,56 @@
                 <div class="hr-line-dashed"></div>
                 <div class="example-wrap">
                     <div class="example">
-                        <form method="post" action="{{ route('role-sort') }}">
+                        <form method="post" action="{{ route('menu-sort') }}">
                             {{ csrf_field() }}
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
                                     <th width="3%"><input type="checkbox" name="chk_all" id="chk_all"/></th>
                                     <th width="5%" class="center"><a
-                                                href="{{ route('role-index', $RoleOrm ->attributes('sort',$order,$search)) }}">排序</a>
+                                                href="{{ route('menu-index', $menuOrm ->attributes('sort',$order,$search)) }}">排序</a>
                                     </th>
                                     <th width="5%"><a
-                                                href="{{ route('role-index', $RoleOrm ->attributes('id',$order,$search)) }}">ID</a>
+                                                href="{{ route('menu-index', $menuOrm ->attributes('id',$order,$search)) }}">ID</a>
                                     </th>
-                                    <th>角色名称</th>
-                                    <th>角色英文名称</th>
-                                    <th>守护者</th>
+                                    <th>菜单名称</th>
+                                    <th>菜单路由</th>
 
 
                                     <th width="13%"><a
-                                                href="{{ route('role-index',$RoleOrm ->attributes('created_at',$order,$search)) }}">创建时间</a>
+                                                href="{{ route('menu-index',$menuOrm ->attributes('created_at',$order,$search)) }}">创建时间</a>
                                     </th>
                                     <th width="8%"><a
-                                                href="{{ route('role-index',$RoleOrm ->attributes('status',$order,$search)) }}">状态</a>
+                                                href="{{ route('menu-index',$menuOrm ->attributes('status',$order,$search)) }}">状态</a>
                                     </th>
 
                                     <th width="8%">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($Roles as $Role)
+                                    @foreach($menus as $menu)
                                         <tr>
                                             <td>
                                                 <input type="checkbox" name="chk_list" class="chk_list"
-                                                       id="chk_list_{{ $Role -> id }}" value="{{ $Role -> id }}"/>
+                                                       id="chk_list_{{ $menu -> id }}" value="{{ $menu -> id }}"/>
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control center"
-                                                       name="sort[{{ $Role -> id }}]" value="{{ $Role -> sort }}">
+                                                       name="sort[{{ $menu -> id }}]" value="{{ $menu -> sort }}">
                                             </td>
-                                            <th>{{ $Role -> id }}</th>
-                                            <td>{{ $Role -> chinese_name }}</td>
-                                            <td>{{ $Role -> name }}</td>
-                                            <td>{{ $Role -> guard_name }}</td>
-                                            <td>{{ $Role -> created_at }}</td>
-                                            <th>{{ $Role -> status($Role -> status) }}</th>
+                                            <th>{{ $menu -> id }}</th>
+                                            <td>{{ $menu -> lefthtml }}{{ $menu -> title }}</td>
+                                            <td>{{ $menu -> lefthtml }}{{ $menu -> route }}</td>
+                                            <td>{{ $menu -> created_at }}</td>
+                                            <th>{{ $menuOrm -> status($menu -> status) }}</th>
                                             <td>
-                                                <a class="btn btn-primary btn-outline btn-xs " onclick="giveAuth({{$Role -> id}})"
-                                                   title="分配权限">
-                                                    <i class="fa fa-lock"></i>
-                                                </a>
-                                                <span>|</span>
                                                     <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('role-edit',['id' => $Role->id ]) }}"
+                                                       href="{{ route('menu-edit',['id' => $menu->id ]) }}"
                                                        title="编辑">
                                                         <i class="fa fa-paste"></i>
                                                     </a>
                                                 <span>|</span>
-                                                <a href="{{ route('role-destroy',['id' => $Role -> id]) }}"
+                                                <a href="{{ route('menu-destroy',['id' => $menu -> id]) }}"
                                                    class="btn btn-warning btn-outline btn-xs delArtciel"
                                                    onclick="return confirm('确定删除?');" title="删除">
                                                     <i class="fa fa-trash-o"></i>
@@ -127,9 +120,6 @@
                             <div class="clearfix" style="line-height: 70px; margin-top: -20px;">
                                 <div style="float: left">
                                     <button class="btn btn-outline btn-success" type="submit">排序</button>
-                                </div>
-                                <div style="float: right">
-                                    {{ $Roles ->links() }}
                                 </div>
                             </div>
 
@@ -174,7 +164,7 @@
             }
 
             if (confirm('确定批量删除?')) {
-                window.location.href = "{{ route('role-destroy',['id' => '']) }}/" + deleteId;
+                window.location.href = "{{ route('menu-destroy',['id' => '']) }}/" + deleteId;
             } else {
                 return false;
             }
@@ -190,20 +180,7 @@
                 return false;
             }
 
-            window.location.href = "{{ route('role-index') }}/0/0/" + search;
-        }
-
-
-        function giveAuth(id) {
-            //iframe层
-            parent.layer.open({
-                type: 2,
-                title: '分配权限',
-                shadeClose: true,
-                shade: 0.5,
-                area: ['300px', '80%'],
-                content: "/boot/role/auth/" + id
-            });
+            window.location.href = "{{ route('menu-index') }}/0/0/" + search;
         }
     </script>
 @endsection

@@ -19,7 +19,7 @@ class User extends Model
 
 
 
-    protected $fillable = ['id','status','name','email','password','remember_token','sort','true_name','role_id'];
+    protected $fillable = ['id','status','name','email','password','remember_token','sort','true_name','role_id','photo'];
 
 
     //设置关键词状态

@@ -42,7 +42,7 @@ class BootMenu extends Model
         ];
 
         if ($int !== null){
-            return array_key_exists($int, $arr) ? $arr[$int] : $arr[self::RECOMMEND_DEFAULT];
+            return array_key_exists($int, $arr) ? $arr[$int] : $arr[self::STATUS_ZERO];
         }
 
         return $arr;

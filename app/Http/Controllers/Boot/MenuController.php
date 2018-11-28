@@ -45,9 +45,12 @@ class MenuController extends CommonController
 
 
 
+
+
         return view('boot.menu.index', [
             'menuOrm' => new BootMenu(),
-            'menus' => tree($menus),
+            'menus' => list_to_tree_parent($menus->toArray()),
+            'menusTree' => treeParent($menus->toArray()),
             'search' => $search,
             'order' => $order,
             'type' => $type,

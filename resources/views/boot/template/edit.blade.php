@@ -1,9 +1,12 @@
 @extends('boot.layouts.base')
 
-@section('title','添加词库')
+@section('title','更改文章')
 
 @section('css')
+    <link rel="stylesheet" href="/static/markdown/css/editormd.css">
     <link rel="stylesheet" href="/static/boot/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/static/webupload/webuploader.css">
+    <link rel="stylesheet" type="text/css" href="/static/webupload/style.css">
     <style>
         .container {
             margin-top: 30px;
@@ -23,6 +26,7 @@
 @endsection
 
 @section('body')
+
     <div id="error">
 
     </div>
@@ -31,41 +35,34 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 添加菜单
+                        <i class="glyphicon glyphicon-pencil"></i> 编辑角色
                     </div>
-                    <form method="post" action="{{ route('menu-store') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('template-update') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
 
-                        <div class="field">
-                            <input class="form-control" type="text" name="title"  placeholder="菜单名称">
-                        </div>
-                        <div class="field">
-                            <input class="form-control" type="text" name="route"  placeholder="菜单路由别名">
-                        </div>
+                        <input type="hidden" name="id" value="{{ $role -> id }}">
+
 
                         <div class="field">
-                            <label>图标(Icon eg：fa-book)</label>
-                            <input class="form-control" type="text" name="icon"  placeholder="Icon">
+                            <input class="form-control" type="text" name="chinese_name" id="title-field" placeholder="角色名称" value="{{ $role -> chinese_name }}">
                         </div>
 
+                        <br/>
                         <div class="field">
-                            <label>菜单级别(Menu Level)</label>
-
-                            <select class="form-control ui search multiple selection tags dropdown  category"
-                                    name="parent_id">
-                                <option  value="0" > 默认顶级 </option>
-                                @foreach($menus as $menu)
-                                    <option  value="{{ $menu -> id }}" >{{ $menu -> lefthtml }}{{ $menu -> title }}</option>
-                                @endforeach
-                            </select>
-
+                            <input class="form-control" type="text" name="name" id="title-field"
+                                   placeholder="角色英文名称" value="{{ $role -> name }}">
                         </div>
-                        <br>
 
                         <div class="field">
-                            <input class="form-control" type="text" name="sort" 
-                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)">
+                            <input class="form-control" type="text" name="guard_name" id="title-field"
+                                  placeholder="守护者(如没有特殊要求，请勿改动)" value="{{ $role -> guard_name }}">
+                        </div>
+
+
+                        <div class="field">
+                            <input class="form-control" type="text" name="sort" id="title-field"
+                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $role -> sort }}">
                         </div>
 
                         <br/>
@@ -73,9 +70,8 @@
                         <div class="ui segment private-checkbox">
                             <div class="field">
                                 <div class="ui toggle checkbox">
-                                    <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
-
-                                    <label>开启权限</label>
+                                    <input type="checkbox" class="js-switch" name="status" {{ $role -> status? "checked" :'' }} style="margin-left: -2px;"/>
+                                    <label>是否显示给用户</label>
                                 </div>
                             </div>
                         </div>
@@ -83,10 +79,10 @@
                         <div class="ui message">
                             <button type="submit" class="ui button teal publish-btn" id="">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                                确认
+                                确定
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <a href="{{ route('menu-index') }}" class="ui button"  name="subject" value="draft">
+                            <a href="{{ route('template-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
                             </a>
                         </div>
@@ -100,8 +96,8 @@
 
 @section('js')
     <script src="/static/boot/js/jquery.form.js"></script>
-    <script type="text/javascript">
 
+    <script type="text/javascript">
         function objToArray(array) {
             var arr = [];
             for (var i in array) {
@@ -132,7 +128,7 @@
                     $('#error').append(
                         "<div style='opacity:1;' class='alert alert-danger'><ul><li>" + value[0] + "</li></ul> </div>"
 
-                    );
+                );
                 })
             } else {
                 window.location.href = res.url;
@@ -140,8 +136,6 @@
         }
 
     </script>
-
-
 @endsection
 
 

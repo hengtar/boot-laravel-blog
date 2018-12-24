@@ -261,6 +261,66 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
 
 
 
+    //Template group
+    Route::group(['prefix' => 'template',], function () {
+
+        //index and recover
+        Route::get('index/{type?}/{order?}/{search?}', 'TemplateController@index')->name('template-index');
+
+        //keyword sort
+        Route::post('sort', 'TemplateController@sort')->name('template-sort');
+
+        //create
+        Route::get('create', 'TemplateController@create')->name('template-create');
+
+        //store
+        Route::post('store', 'TemplateController@store')->name('template-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'TemplateController@destroy')->name('template-destroy');
+
+
+        //edit
+        Route::get('edit/{id}', 'TemplateController@edit')->name('template-edit');
+
+        //update
+        Route::post('update', 'TemplateController@update')->name('template-update');
+
+    });
+
+
+    //advert group
+    Route::group(['prefix' => 'advert'], function () {
+
+        //index and recover
+        Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'AdvertController@index')->name('advert-index');
+
+        //article sort
+        Route::post('sort', 'AdvertController@sort')->name('advert-sort');
+
+        //create
+        Route::get('create', 'AdvertController@create')->name('advert-create');
+
+        //store
+        Route::post('store', 'AdvertController@store')->name('advert-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'AdvertController@destroy')->name('advert-destroy');
+
+        //ForceDelete
+        Route::get('ForceDelete/{id}', 'AdvertController@deleteForce')->name('advert-ForceDelete');
+
+        //restore
+        Route::get('restore/{id}', 'AdvertController@restore')->name('advert-restore');
+
+        //edit
+        Route::get('edit/{id}', 'AdvertController@edit')->name('advert-edit');
+
+        //update
+        Route::post('update', 'AdvertController@update')->name('advert-update');
+
+    }) ;
+
 
 }) ;
 

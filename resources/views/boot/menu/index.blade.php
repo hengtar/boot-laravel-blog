@@ -89,7 +89,7 @@
                                         <td>{{ $menuTree['lefthtml'] }}{{ $menuTree['route'] }}</td>
 
                                         <td>{{ $menuTree['created_at'] }}</td>
-                                        <th>{{ $menuOrm -> status($menuTree['created_at']) }}</th>
+                                        <th>{{ $menuOrm -> status($menuTree['status']) }}</th>
                                         <td>
                                             <a class="btn btn-primary btn-outline btn-xs "
                                                href="{{ route('menu-edit',['id' => $menuTree['id'] ]) }}"

@@ -23,7 +23,7 @@ class BootMenu extends Model
 //
 //    protected $dates= ['deleted_at'];
 //
-//    protected $fillable = ['id','p_id','status','keywords','summary','photo','category','sort'];
+    protected $fillable = ['id','parent_id','status','title','route','sort','icon'];
 //
 //    protected $softCascade = ['article'];
 //
@@ -36,6 +36,7 @@ class BootMenu extends Model
 
     public function status($int = null)
     {
+
         $arr = [
             self::STATUS_ZERO      => "关闭",
             self::STATUS_ONE       => "开启",

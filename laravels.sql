@@ -47,7 +47,7 @@ INSERT INTO `article_category` VALUES (4, 0, '分类4', 1, 1, 0, 0, 0);
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `c_id` int(11) NOT NULL DEFAULT 0 COMMENT '文章分类Id',
+  `advert` int(11) NOT NULL DEFAULT 0 COMMENT '文章分类Id',
   `status` int(1) NOT NULL DEFAULT 1 COMMENT '文章状态  1开启 0 关闭',
   `title` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文章标题',
   `keywords` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文章关键词',

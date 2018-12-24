@@ -73,6 +73,8 @@ class Rbac
 
 
         $request -> menu  = prepareMenu($menu);
+
+
         $request -> users  = $user;
 
         return $next($request);

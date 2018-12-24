@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Boot;
 
+use App\Http\Requests\StoreMenu;
 use App\Http\Requests\StorePermission;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -43,10 +44,6 @@ class MenuController extends CommonController
         //BootMenu value
         $menus = $builder->get();
 
-
-
-
-
         return view('boot.menu.index', [
             'menuOrm' => new BootMenu(),
             'menus' => list_to_tree_parent($menus->toArray()),
@@ -70,7 +67,7 @@ class MenuController extends CommonController
                     return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
                 }
 
-                BootMenu::withTrashed()->where('id', $key)->update(['sort' => $value]);
+                BootMenu::where('id', $key)->update(['sort' => $value]);
             }
 
             return redirect()->back()->with('success', '排序成功!');
@@ -82,17 +79,17 @@ class MenuController extends CommonController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new reso urce.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $permissions = tree(BootMenu::all('id', 'chinese_name','p_id'));
+        $menus = treeParent(BootMenu::all('id', 'title','parent_id'));
 
         return view('boot.menu.create', [
             //view show recommend and status
-            'permissions' => $permissions,
+            'menus' => $menus,
         ]);
     }
 
@@ -102,21 +99,22 @@ class MenuController extends CommonController
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePermission $request)
+    public function store(StoreMenu $request)
     {
         //get request
         $param = $request->toArray();
 
+
         //format BootMenu key => value
         $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
-
+       // dd($param);
         //create BootMenu key => value
         $result = BootMenu::create($param);
 
         //save BootMenu
         if ($result->save()) {
-            return response()->json(['success' => true, 'url' => route('BootMenu-index')]);
+            return response()->json(['success' => true, 'url' => route('menu-index')]);
         }
     }
 

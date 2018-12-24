@@ -41,11 +41,13 @@
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                        @foreach($value['child'] as $k => $v)
-                        <li>
-                            <a class="J_menuItem" href="{{ route($v['route']) }}">{{ $v['title'] }}</a>
-                        </li>
-                        @endforeach
+                        @if (!empty($value['child']))
+                            @foreach($value['child'] as $k => $v)
+                            <li>
+                                <a class="J_menuItem" href="{{ route($v['route']) }}">{{ $v['title'] }}</a>
+                            </li>
+                            @endforeach
+                        @endif
                     </ul>
                 </li>
                 @endforeach

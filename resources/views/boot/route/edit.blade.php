@@ -31,31 +31,31 @@
             <div class="ui segment">
                 <div class="content extra-padding">
                     <div class="ui header text-center text gery" style="margin:10px 0 40px">
-                        <i class="glyphicon glyphicon-pencil"></i> 编辑菜单
+                        <i class="glyphicon glyphicon-pencil"></i> 编辑权限
                     </div>
-                    <form method="post" action="{{ route('menu-update') }}" accept-charset="UTF-8" class="ui form"
+                    <form method="post" action="{{ route('permission-update') }}" accept-charset="UTF-8" class="ui form"
                           style="min-height: 50px;" id="insert">
                         {{ csrf_field() }}
-                        <input type="hidden" name="id" value="{{ $BootMenu -> id }}">
+                        <input type="hidden" name="id" value="{{ $permission -> id }}">
 
                         <div class="field">
-                            <input class="form-control" type="text" name="title" id="title-field" placeholder="菜单名称" value="{{ $BootMenu -> title }}">
+                            <input class="form-control" type="text" name="chinese_name" id="title-field" placeholder="权限名称" value="{{ $permission -> chinese_name }}">
                         </div>
                         <div class="field">
-                            <input class="form-control" type="text" name="route" id="title-field" placeholder="菜单路由别名" value="{{ $BootMenu -> route }}">
+                            <input class="form-control" type="text" name="name" id="title-field" placeholder="权限路由别名" value="{{ $permission -> name }}">
                         </div>
                         <div class="field">
-                            <label>图标(Icon eg：fa-book)</label>
-                            <input class="form-control" type="text" name="icon"  placeholder="Icon" value="{{ $BootMenu -> icon }}">
+                            <input class="form-control" type="text" name="guard_name" id="title-field" placeholder="守护者(如没有特殊要求，请勿改动)" value="{{ $permission -> guard_name }}">
                         </div>
+
                         <div class="field">
-                            <label>菜单级别(Permission Level)</label>
+                            <label>权限级别(Permission Level)</label>
 
                             <select class="form-control ui search multiple selection tags dropdown  category"
                                     name="p_id">
                                 <option  value="0" > 默认顶级 </option>
-                                @foreach($menus as $routes)
-                                    <option value="{{ $routes -> id }}" {{ $routes -> id == $BootMenu -> p_id ? 'selected' : '' }}>{{ $routes -> lefthtml }}{{ $routes -> chinese_name }}</option>
+                                @foreach($permissions as $routes)
+                                    <option value="{{ $routes -> id }}" {{ $routes -> id == $permission -> p_id ? 'selected' : '' }}>{{ $routes -> lefthtml }}{{ $routes -> chinese_name }}</option>
                                 @endforeach
                             </select>
 
@@ -63,7 +63,7 @@
                         <br>
                         <div class="field">
                             <input class="form-control" type="text" name="sort" id="title-field"
-                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $BootMenu -> sort }}">
+                                   placeholder="排序 (数越大越靠前 1 - 100 默认：50)" value="{{ $permission -> sort }}">
                         </div>
                         <br/>
                         <div class="ui segment private-checkbox">
@@ -71,7 +71,7 @@
                                 <div class="ui toggle checkbox">
                                     <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
 
-                                    <label>开启菜单</label>
+                                    <label>开启权限</label>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                 确认
                             </button>
                             &nbsp;&nbsp;or&nbsp;&nbsp;
-                            <a href="{{ route('menu-index') }}" class="ui button"  name="subject" value="draft">
+                            <a href="{{ route('permission-index') }}" class="ui button"  name="subject" value="draft">
                                 <i class="glyphicon glyphicon-repeat"></i> 返回列表
                             </a>
                         </div>

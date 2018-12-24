@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 
-class StoreMenu extends FormRequest
+class StoreRoute extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,8 +30,8 @@ class StoreMenu extends FormRequest
 
        // dd($this->get('id'));
         return [
+            'id' => ['required','numeric',Rule::unique('boot_menu')->ignore($this->get('id'))],
             'title' => ['required','max:255','string',Rule::unique('boot_menu')->ignore($this->get('id'))],
-            'route' => ['required','max:255','string',Rule::unique('boot_menu')->ignore($this->get('id'))],
             'sort' => 'numeric|nullable',
         ];
     }
@@ -44,10 +44,9 @@ class StoreMenu extends FormRequest
             'title.max' => '菜单名称最长为255个字符',
             'title.string' => '菜单名称:请填写字符串',
 
-            'route.required' => '菜单路由别名必填',
-            'route.unique' => '菜单路由别名已存在',
-            'route.max' => '菜单路由别名最长为255个字符',
-            'route.string' => '菜单路由别名:请填写字符串',
+            'id.required' => '菜单ID必填',
+            'id.unique' => '菜单ID别名已存在',
+            'id.numeric' => '菜单ID必须是数字(请填写分类ID)',
 
             'sort.numeric' => '排序必须是数字',
         ];

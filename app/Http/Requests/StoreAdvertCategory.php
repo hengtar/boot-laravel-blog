@@ -3,11 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
-
-class StoreMenu extends FormRequest
+class StoreAdvertCategory extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +23,10 @@ class StoreMenu extends FormRequest
      */
     public function rules()
     {
-
-
-       // dd($this->get('id'));
         return [
-            'title' => ['required','max:255','string',Rule::unique('boot_menu')->ignore($this->get('id'))],
-            'route' => ['required','max:255','string',Rule::unique('boot_menu')->ignore($this->get('id'))],
+            'category' => 'required|max:500',
+            'keywords' => 'max:500',
+            'summary' => 'max:1000',
             'sort' => 'numeric|nullable',
         ];
     }
@@ -39,16 +34,10 @@ class StoreMenu extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => '菜单名称必填',
-            'title.unique' => '菜单名称已存在',
-            'title.max' => '菜单名称最长为255个字符',
-            'title.string' => '菜单名称:请填写字符串',
-
-            'route.required' => '菜单路由别名必填',
-            'route.unique' => '菜单路由别名已存在',
-            'route.max' => '菜单路由别名最长为255个字符',
-            'route.string' => '菜单路由别名:请填写字符串',
-
+            'category.required' => '分类标题必填',
+            'category.max' => '分类标题最长为500个字符',
+            'keywords.max' => '分类关键词最长为255个字符',
+            'summary.max' => '分类描述最长为1000个字符',
             'sort.numeric' => '排序必须是数字',
         ];
     }

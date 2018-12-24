@@ -10,6 +10,7 @@
     <link href="{{ asset('/static/boot/css/font-awesome.min93e3.css') }}" rel="stylesheet">
     <link href="{{ asset('/static/boot/css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/static/boot/css/style.min862f.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/static/photo/dist/zoomify.min.css') }}">
     @section('css')
 
     @show
@@ -27,6 +28,11 @@
 <script src="{{ asset('/static/boot/js/hplus.min.js') }}"></script>
 <script src="{{ asset('/static/boot/js/contabs.min.js') }}"></script>
 <script src="{{ asset('/static/boot/js/plugins/pace/pace.min.js') }}"></script>
+<script src="{{ asset('/static/photo/dist/zoomify.min.js') }}"></script>
+<script type="text/javascript">
+    $('.example img').zoomify();
+</script>
+
 @section('js')
 
 @show

@@ -1,20 +1,21 @@
 <?php
 /**
  * Created by PhpStorm.
- * BootMenu: Administrator
+ * Route: Administrator
  * Date: 2018\11\2 0002
  * Time: 13:02
  */
 
 namespace App\Http\Controllers\Boot;
 
-use App\Http\Requests\StoreMenu;
+use App\Http\Requests\StoreRoute;
 use App\Http\Requests\StorePermission;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Mockery\Exception;
-use App\Models\BootMenu;
+use App\Models\Route;
 
-class MenuController extends CommonController
+class RouteController extends CommonController
 {
 
     /**
@@ -27,7 +28,7 @@ class MenuController extends CommonController
 
 
         //builder
-        $builder = BootMenu::query();
+        $builder = Route::query();
 
         //order
         if ($type && $order) {
@@ -38,16 +39,16 @@ class MenuController extends CommonController
 
         //search
         if ($search) {
-            $builder->where('BootMenu', 'like', '%' . $search . '%');
+            $builder->where('Route', 'like', '%' . $search . '%');
         }
 
-        //BootMenu value
-        $menus = $builder->get();
+        //Route value
+        $routes = $builder->get();
 
-        return view('boot.menu.index', [
-            'menuOrm' => new BootMenu(),
-            'menus' => list_to_tree_parent($menus->toArray()),
-            'menusTree' => treeParent($menus->toArray()),
+        return view('boot.route.index', [
+            'routeOrm' => new Route(),
+            'routes' => list_to_tree_parent($routes->toArray()),
+            'routesTree' => treeParent($routes->toArray()),
             'search' => $search,
             'order' => $order,
             'type' => $type,
@@ -67,7 +68,7 @@ class MenuController extends CommonController
                     return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
                 }
 
-                BootMenu::where('id', $key)->update(['sort' => $value]);
+                Route::where('id', $key)->update(['sort' => $value]);
             }
 
             return redirect()->back()->with('success', '排序成功!');
@@ -85,11 +86,13 @@ class MenuController extends CommonController
      */
     public function create()
     {
-        $menus = treeParent(BootMenu::all('id', 'title','parent_id'));
+        $routes = treeParent(Route::all('id', 'title','parent_id'));
 
-        return view('boot.menu.create', [
+        $templates = Template::all('id','name');
+        return view('boot.route.create', [
             //view show recommend and status
-            'menus' => $menus,
+            'routes' => $routes,
+            'templates' => $templates,
         ]);
     }
 
@@ -99,22 +102,28 @@ class MenuController extends CommonController
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMenu $request)
+    public function store(StoreRoute $request)
     {
         //get request
         $param = $request->toArray();
 
 
-        //format BootMenu key => value
+
+        //format Route key => value
         $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
        // dd($param);
-        //create BootMenu key => value
-        $result = BootMenu::create($param);
+        //create Route key => value
+        $template =  Template::where('id',$param['template_id'])->first();
 
-        //save BootMenu
+        $param['route'] = '/'.$template->route.'/'.$param['id'];
+
+
+        $result = Route::create($param);
+
+        //save Route
         if ($result->save()) {
-            return response()->json(['success' => true, 'url' => route('menu-index')]);
+            return response()->json(['success' => true, 'url' => route('route-index')]);
         }
     }
 
@@ -127,9 +136,9 @@ class MenuController extends CommonController
     public function edit($id)
     {
 
-        return view('boot.menu.edit', [
-            'BootMenu'  => BootMenu::find($id),
-            'menus' => tree(BootMenu::all('id', 'title','parent_id'))
+        return view('boot.route.edit', [
+            'Route'  => Route::find($id),
+            'permissions' => tree(Route::all('id', 'chinese_name','p_id'))
         ]);
     }
 
@@ -140,22 +149,22 @@ class MenuController extends CommonController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreMenu $request)
+    public function update(StorePermission $request)
     {
         //get request
         $param = $request->toArray();
 
-        //format BootMenu key => value
+        //format Route key => value
         $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
-        //create BootMenu key => value
-        $article = BootMenu::find($param['id']);
+        //create Route key => value
+        $article = Route::find($param['id']);
 
-        //save BootMenu
+        //save Route
         if ($article->update($param)) {
 
-            return response()->json(['success' => true, 'url' => route('menu-index')]);
+            return response()->json(['success' => true, 'url' => route('Route-index')]);
         }
     }
 
@@ -171,7 +180,7 @@ class MenuController extends CommonController
         $id = FormatDelete($id);
 
         // databases operating
-        if (BootMenu::destroy($id)) {
+        if (Route::destroy($id)) {
 
             return redirect()->back()->with('success', '删除成功！');
         } else {

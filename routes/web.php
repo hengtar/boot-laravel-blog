@@ -257,6 +257,33 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
 
     });
 
+    //role group
+    Route::group(['prefix' => 'route',], function () {
+
+        //index and recover
+        Route::get('index/{type?}/{order?}/{search?}', 'RouteController@index')->name('route-index');
+
+        //keyword sort
+        Route::post('sort', 'RouteController@sort')->name('route-sort');
+
+        //create
+        Route::get('create', 'RouteController@create')->name('route-create');
+
+        //store
+        Route::post('store', 'RouteController@store')->name('route-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'RouteController@destroy')->name('route-destroy');
+
+
+        //edit
+        Route::get('edit/{id}', 'RouteController@edit')->name('route-edit');
+
+        //update
+        Route::post('update', 'RouteController@update')->name('route-update');
+
+    });
+
 
 
 
@@ -318,6 +345,39 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
 
         //update
         Route::post('update', 'AdvertController@update')->name('advert-update');
+
+    }) ;
+
+
+    //advertCategory group
+    Route::group(['prefix' => 'advertCategory'], function () {
+
+        //index and recover
+        Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'AdvertCategoryController@index')->name('advertCategory-index');
+
+        //article sort
+        Route::post('sort', 'AdvertCategoryController@sort')->name('advertCategory-sort');
+
+        //create
+        Route::get('create', 'AdvertCategoryController@create')->name('advertCategory-create');
+
+        //store
+        Route::post('store', 'AdvertCategoryController@store')->name('advertCategory-store');
+
+        //destroy
+        Route::get('destroy/{id}', 'AdvertCategoryController@destroy')->name('advertCategory-destroy');
+
+        //ForceDelete
+        Route::get('ForceDelete/{id}', 'AdvertCategoryController@deleteForce')->name('advertCategory-ForceDelete');
+
+        //restore
+        Route::get('restore/{id}', 'AdvertCategoryController@restore')->name('advertCategory-restore');
+
+        //edit
+        Route::get('edit/{id}', 'AdvertCategoryController@edit')->name('advertCategory-edit');
+
+        //update
+        Route::post('update', 'AdvertCategoryController@update')->name('advertCategory-update');
 
     }) ;
 

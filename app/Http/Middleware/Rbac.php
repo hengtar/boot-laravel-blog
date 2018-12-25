@@ -37,10 +37,10 @@ class Rbac
           | 所有这些响应都是Spatie\Permission\Models\Permission对象的集合。
           |
           */
+        $user = Auth::user();
 
         if (config('auth.auth_permission.auth')){
 
-            $user = Auth::user();
             if ($user -> hasRole('super-admin')){
                 $menu = BootMenu::all()->toArray();
             }else {

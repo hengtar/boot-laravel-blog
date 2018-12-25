@@ -95,7 +95,7 @@ class Advert extends Model
      */
     public function advertCategory()
     {
-        return $this->belongsTo('App\Models\AdvertCategory','category_id','id')->withTrashed();
+        return $this->belongsTo('App\Models\AdvertCategory','category_id','id');
     }
 
 

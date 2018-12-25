@@ -69,7 +69,7 @@
                         <div class="ui segment private-checkbox">
                             <div class="field">
                                 <div class="ui toggle checkbox">
-                                    <input type="checkbox" class="js-switch" name="status" checked style="margin-left: -2px;"/>
+                                    <input type="checkbox" class="js-switch" name="status" {{ $permission -> status ? "checked" :'' }} style="margin-left: -2px;"/>
 
                                     <label>开启权限</label>
                                 </div>

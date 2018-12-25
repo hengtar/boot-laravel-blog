@@ -17,7 +17,7 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>广告分类列表 {{ $recover == false ? "" : "/ 广告分类回收站"}} {{ $search  ? "/ 广告分类搜索" : ""}}</h5>
+                <h5>广告分类列表 {{ $search  ? "/ 广告分类搜索" : ""}}</h5>
             </div>
             <div class="ibox-content">
                 <div class="row">
@@ -31,33 +31,12 @@
                         </div>
                         <div class="col-sm-2" style="width: 100px">
                             <div class="input-group">
-                                @if ($recover == false)
-                                    <a onclick="deleteAll()">
-                                        <button class="btn btn-outline btn-warning" type="button">批量删除</button>
-                                    </a>
-                                @else
-                                    <a onclick="ForceDeleteAll()">
-                                        <button class="btn btn-outline btn-warning" type="button">永久删除</button>
-                                    </a>
-                                @endif
+                                <a onclick="deleteAll()">
+                                    <button class="btn btn-outline btn-warning" type="button">批量删除</button>
+                                </a>
                             </div>
                         </div>
-                        <div class="col-sm-2" style="width: 100px">
-                            <div class="input-group">
-                                @if ($recover == false)
-                                    <a href="{{ route('advertCategory-index',['recover' => true]) }}">
-                                        <button class="btn  btn-default" type="button"><i class="fa fa-trash-o"></i> 回收站
-                                        </button>
-                                    </a>
-                                @else
-                                    <a href="{{ route('advertCategory-index') }}">
-                                        <button class="btn  btn-info" type="button"><i class="fa fa-list-alt"></i>
-                                            &nbsp;列 表
-                                        </button>
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
+
                         <div class="col-sm-3">
                             <div class="input-group" style="width: 270px">
                                 <input type="text" class="form-control" id="search" name="title" value="{{ $search }}"
@@ -83,64 +62,59 @@
                                 <tr>
                                     <th width="3%"><input type="checkbox" name="chk_all" id="chk_all"/></th>
                                     <th width="5%" class="center"><a
-                                                href="{{ route('advertCategory-index', $advertCategoryOrm ->attributes($recover,'sort',$order,$search)) }}">排序</a>
+                                                href="{{ route('advertCategory-index', $advertCategoryOrm ->attributes('sort',$order,$search)) }}">排序</a>
                                     </th>
                                     <th width="5%"><a
-                                                href="{{ route('advertCategory-index', $advertCategoryOrm ->attributes($recover,'id',$order,$search)) }}">ID</a>
+                                                href="{{ route('advertCategory-index', $advertCategoryOrm ->attributes('id',$order,$search)) }}">ID</a>
                                     </th>
                                     <th>分类名称</th>
                                     <th>广告位置图</th>
                                     <th width="15%"><a
-                                                href="{{ route('advertCategory-index',$advertCategoryOrm ->attributes($recover,'created_at',$order,$search)) }}">发布时间</a>
+                                                href="{{ route('advertCategory-index',$advertCategoryOrm ->attributes('created_at',$order,$search)) }}">发布时间</a>
                                     </th>
                                     <th width="10%"><a
-                                                href="{{ route('advertCategory-index',$advertCategoryOrm ->attributes($recover,'status',$order,$search)) }}">状态</a>
+                                                href="{{ route('advertCategory-index',$advertCategoryOrm ->attributes('status',$order,$search)) }}">状态</a>
                                     </th>
 
                                     <th width="8%">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($advertCategorys as $advertCategory)
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" name="chk_list" class="chk_list"
-                                                       id="chk_list_{{ $advertCategory -> id }}" value="{{ $advertCategory -> id }}"/>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control center"
-                                                       name="sort[{{ $advertCategory -> id }}]" value="{{ $advertCategory -> sort }}">
-                                            </td>
-                                            <th>{{ $advertCategory -> id }}</th>
-                                            <td>{{ $advertCategory -> lefthtml }}{{ $advertCategory -> category }}</td>
-                                            <td class="example"><img height="40px" src="{{ $advertCategory -> photo }}" alt=""></td>
-                                            <td>{{ $advertCategory -> created_at }}</td>
-                                            <th>{{ $advertCategory -> status($advertCategory -> status) }}</th>
+                                @foreach($advertCategorys as $advertCategory)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="chk_list" class="chk_list"
+                                                   id="chk_list_{{ $advertCategory -> id }}"
+                                                   value="{{ $advertCategory -> id }}"/>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control center"
+                                                   name="sort[{{ $advertCategory -> id }}]"
+                                                   value="{{ $advertCategory -> sort }}">
+                                        </td>
+                                        <th>{{ $advertCategory -> id }}</th>
+                                        <td>{{ $advertCategory -> lefthtml }}{{ $advertCategory -> category }}</td>
+                                        <td class="example"><img height="40px" src="{{ $advertCategory -> photo }}"
+                                                                 alt=""></td>
+                                        <td>{{ $advertCategory -> created_at }}</td>
+                                        <th>{{ $advertCategory -> status($advertCategory -> status) }}</th>
 
-                                            <td>
-                                                @if ($recover == false)
-                                                    <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('advertCategory-edit',['id' => $advertCategory->id ]) }}"
-                                                       title="编辑">
-                                                        <i class="fa fa-paste"></i>
-                                                    </a>
-                                                @else
-                                                    <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('advertCategory-restore',['id' => $advertCategory -> id]) }}"
-                                                       onclick="return confirm('此操作将恢复此分类下所有被删除的数据,确定恢复?');" title="恢复">
-                                                        <i class="fa fa-undo"></i>
-                                                    </a>
-                                                @endif
-                                                <span>|</span>
-                                                <a href="{{ $recover == false ? route('advertCategory-destroy',['id' => $advertCategory -> id]) : route('advertCategory-ForceDelete',['id' => $advertCategory -> id])}}"
-                                                   class="btn btn-warning btn-outline btn-xs delArtciel"
-                                                   onclick="return confirm('当前分类下的所有数据都会被删除！！！确定删除?');" title="删除">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                        <td>
+                                            <a class="btn btn-primary btn-outline btn-xs "
+                                               href="{{ route('advertCategory-edit',['id' => $advertCategory->id ]) }}"
+                                               title="编辑">
+                                                <i class="fa fa-paste"></i>
+                                            </a>
+                                            <span>|</span>
+                                            <a href="{{  route('advertCategory-destroy',['id' => $advertCategory -> id]) }}"
+                                               class="btn btn-warning btn-outline btn-xs delArtciel"
+                                               onclick="return confirm('确定删除?');" title="删除">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-                                    @endforeach
+                                @endforeach
 
                                 </tbody>
                             </table>
@@ -231,7 +205,7 @@
                 return false;
             }
 
-            window.location.href = "{{ route('advertCategory-index') }}/{{ $recover == false ? 0 : 1 }}/0/0/" + search;
+            window.location.href = "{{ route('advertCategory-index') }}/0/0/" + search;
         }
     </script>
 @endsection

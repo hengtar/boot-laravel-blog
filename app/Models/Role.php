@@ -55,7 +55,9 @@ class Role extends Model
     public function getUserChineseName($id)
     {
 
+
         $userRole = \DB::table('model_has_roles')->where('model_id',$id)->first();
+
         return  $this->find($userRole -> role_id) -> chinese_name;
 
     }

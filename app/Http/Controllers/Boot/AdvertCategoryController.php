@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Boot;
 
 use App\Http\Requests\StoreAdvertCategory;
+use App\Models\Advert;
 use App\Models\Article;
 use App\Models\AdvertCategory;
 use Illuminate\Http\Request;
@@ -21,16 +22,11 @@ class AdvertCategoryController extends CommonController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($recover = false, $type = null, $order = null, $search = null)
+    public function index($type = null, $order = null, $search = null)
     {
 
         //builder
         $builder = AdvertCategory::query();
-
-        //recover status
-        if ($recover) {
-            $builder->onlyTrashed();
-        }
 
         //order
         if ($type && $order) {
@@ -45,13 +41,12 @@ class AdvertCategoryController extends CommonController
         }
 
         //advertCategory value
-        $advertCategorys = $recover || $search ?  $builder->get() : tree($builder->get());
+        $advertCategorys = $search ?  $builder->get() : tree($builder->get());
 
 
         return view('boot.advertCategory.index', [
             'advertCategoryOrm'   => new AdvertCategory(),
             'advertCategorys'     => $advertCategorys,
-            'recover'       => $recover,
             'search'        => $search,
             'order'         => $order,
             'type'          => $type,
@@ -73,7 +68,7 @@ class AdvertCategoryController extends CommonController
                 }
 
 
-                AdvertCategory::withTrashed()->where('id', $key)->update(['sort' => $value]);
+                AdvertCategory::where('id', $key)->update(['sort' => $value]);
             }
 
             return redirect()->back()->with('success', '排序成功!');
@@ -185,8 +180,12 @@ class AdvertCategoryController extends CommonController
         foreach ($id as $value){
 
             if (AdvertCategory::where('p_id',$value)->first()){
-                return redirect()->back()->with('error', '删除失败！当前ID:' . $value .'还存在下级分类');
-            }else{
+                return redirect()->back()->with('error', '当前分类ID:' . $value .'存在下级分类');
+            }elseif (Advert::withTrashed()->where('category_id',$value)->first()){
+
+                return redirect()->back()->with('error', '当前分类ID:' . $value .'存在广告');
+
+            } else{
                 // databases operating
                 if (AdvertCategory::destroy($value)) {
 
@@ -200,52 +199,6 @@ class AdvertCategoryController extends CommonController
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteForce($id)
-    {
-        try {
-            //format delete id
-            $id = FormatDelete($id);
-
-            // databases operating
-            AdvertCategory::withTrashed()->whereIn('id', $id)->forceDelete();
-            foreach ($id as  $value) {
-                Article::withTrashed()->where('advertCategory_id', $value)->forceDelete();
-            }
-
-            return redirect()->back()->with('success', '永久删除成功！');
-
-        } catch (Exception $e) {
-
-            return redirect()->back()->with('error', '永久删除失败！');
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function restore($id)
-    {
-        //find the id advertCategory
-        $article = AdvertCategory::withTrashed()->find($id);
-
-        //restore the id advertCategory
-        if ($article->restore()) {
-            return redirect()->back()->with('success', '恢复成功！');
-
-        } else {
-            return redirect()->back()->with('error', '恢复失败！');
-        }
-    }
 
 
 }

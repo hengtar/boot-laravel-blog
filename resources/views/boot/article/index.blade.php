@@ -124,7 +124,7 @@
 
                                             <td>{{ $article -> category -> category }}</td>
                                             <td>
-                                                <img src="{{ $article -> photo }}" height="30" width="80"
+                                                <img src="{{ $article -> photo }}" height="50"
                                                      onError='this.src="{{ asset('/static/boot/img/no.png') }}"'>
                                             </td>
                                             <td>{{ $article -> created_at }}</td>
@@ -142,12 +142,6 @@
                                                         <i class="fa fa-paste"></i>
                                                     </a>
                                                 @else
-                                                    {{--<a class="btn btn-primary btn-outline btn-xs "--}}
-                                                       {{--href="{{ route('article-restore',['id' => $article -> id]) }}"--}}
-                                                       {{--onclick="return confirm('确定恢复?');" title="恢复">--}}
-                                                        {{--<i class="fa fa-undo"></i>--}}
-                                                    {{--</a>--}}
-
                                                     <a class="btn btn-primary btn-outline btn-xs " onclick="restore({{ $article->id }})" title="恢复">
                                                         <i class="fa fa-undo"></i>
                                                     </a>
@@ -174,7 +168,6 @@
                                     {{ $articles ->links() }}
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>

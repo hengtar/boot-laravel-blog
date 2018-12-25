@@ -10,13 +10,10 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class AdvertCategory extends Model
 {
-    use SoftDeletes;
-    use \Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
     protected $table= 'advert_category';
 
@@ -41,29 +38,22 @@ class AdvertCategory extends Model
         ];
 
         if ($int !== null){
-            return array_key_exists($int, $arr) ? $arr[$int] : $arr[self::RECOMMEND_DEFAULT];
+            return array_key_exists($int, $arr) ? $arr[$int] : $arr[self::STATUS_ZERO];
         }
 
         return $arr;
     }
 
     //route
-    public function attributes($recover,$type,$order,$search)
+    public function attributes($type,$order,$search)
     {
         return [
-            'recover'   => $recover == false ? 0 : 1,
             'type'      => $type,
             'order'     => $type  && $order == 'desc' ? 'asc' : 'desc',
             'search'    => $search
         ];
     }
 
-    //use \Askedio\SoftCascade\Traits\SoftCascadeTrait;    使用  protected $softCascade = ['article'];
-    public function article()
-    {
-        return $this->hasOne('App\Models\Article','category_id','id');
-
-    }
 
 
 

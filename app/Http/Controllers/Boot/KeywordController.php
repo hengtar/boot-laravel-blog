@@ -89,7 +89,6 @@ class KeywordController extends CommonController
     public function create()
     {
         return view('boot.keyword.create', [
-            //view show recommend and status
             'keyword' => new Keyword(),
         ]);
     }
@@ -104,7 +103,6 @@ class KeywordController extends CommonController
     {
         //get request
         $param = $request->toArray();
-
 
         //format keyword key => value
         $param['views']  = $param['views'] == null ? rand(100, 500) : $param['views'];
@@ -163,7 +161,6 @@ class KeywordController extends CommonController
 
         //save keyword
         if ($article->update($param)) {
-
             return response()->json(['success' => true, 'url' => route('keyword-index')]);
         }
     }

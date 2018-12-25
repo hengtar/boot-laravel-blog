@@ -86,13 +86,11 @@ class RouteController extends CommonController
      */
     public function create()
     {
-        $routes = treeParent(Route::all('id', 'title','parent_id'));
 
-        $templates = Template::all('id','name');
         return view('boot.route.create', [
             //view show recommend and status
-            'routes' => $routes,
-            'templates' => $templates,
+            'routes'    => treeParent(Route::all('id', 'title','parent_id')),
+            'templates' => Template::all('id','name'),
         ]);
     }
 
@@ -116,8 +114,9 @@ class RouteController extends CommonController
         //create Route key => value
         $template =  Template::where('id',$param['template_id'])->first();
 
-        $param['route'] = '/'.$template->route.'/'.$param['id'];
 
+
+        if (empty($param['route'])) $param['route'] = '/'.$template->route.'/'.$param['id'];
 
         $result = Route::create($param);
 
@@ -137,8 +136,10 @@ class RouteController extends CommonController
     {
 
         return view('boot.route.edit', [
-            'Route'  => Route::find($id),
-            'permissions' => tree(Route::all('id', 'chinese_name','p_id'))
+            'info'  => Route::find($id),
+            //view show recommend and status
+            'routes'    => treeParent(Route::all('id', 'title','parent_id')),
+            'templates' => Template::all('id','name'),
         ]);
     }
 
@@ -149,23 +150,41 @@ class RouteController extends CommonController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePermission $request)
+    public function update(StoreRoute $request)
     {
+
+
+
         //get request
         $param = $request->toArray();
 
         //format Route key => value
-        $param['sort']  = $param['sort'] == null ? 50 : $param['sort'];
+        $param['sort']   = $param['sort']  == null ? 50 : $param['sort'];
         $param['status'] = empty($param['status'])  ? 0 : 1;
 
         //create Route key => value
-        $article = Route::find($param['id']);
+        $template =  Template::where('id',$param['template_id'])->first();
+
+
+
+
+
+        if (empty($param['route'])) $param['route'] = '/'.$template->route.'/'.$param['id'];
+
+
+
+        $result = Route::find($param['old_id']);
+
+        if ($param['template_id'] !== $template->id){
+            $param['route'] = '/'.$template->route.'/'.$param['id'];
+        }
 
         //save Route
-        if ($article->update($param)) {
+        if ($result->update($param)) {
 
-            return response()->json(['success' => true, 'url' => route('Route-index')]);
+            return response()->json(['success' => true, 'url' => route('route-index')]);
         }
+
     }
 
     /**

@@ -16,7 +16,7 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>文章分类列表 {{ $recover == false ? "" : "/ 文章分类回收站"}} {{ $search  ? "/ 文章分类搜索" : ""}}</h5>
+                <h5>文章分类列表{{ $search  ? "/ 文章分类搜索" : ""}}</h5>
             </div>
             <div class="ibox-content">
                 <div class="row">
@@ -30,31 +30,9 @@
                         </div>
                         <div class="col-sm-2" style="width: 100px">
                             <div class="input-group">
-                                @if ($recover == false)
-                                    <a onclick="deleteAll()">
-                                        <button class="btn btn-outline btn-warning" type="button">批量删除</button>
-                                    </a>
-                                @else
-                                    <a onclick="ForceDeleteAll()">
-                                        <button class="btn btn-outline btn-warning" type="button">永久删除</button>
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-sm-2" style="width: 100px">
-                            <div class="input-group">
-                                @if ($recover == false)
-                                    <a href="{{ route('category-index',['recover' => true]) }}">
-                                        <button class="btn  btn-default" type="button"><i class="fa fa-trash-o"></i> 回收站
-                                        </button>
-                                    </a>
-                                @else
-                                    <a href="{{ route('category-index') }}">
-                                        <button class="btn  btn-info" type="button"><i class="fa fa-list-alt"></i>
-                                            &nbsp;列 表
-                                        </button>
-                                    </a>
-                                @endif
+                                <a onclick="deleteAll()">
+                                    <button class="btn btn-outline btn-warning" type="button">批量删除</button>
+                                </a>
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -68,7 +46,6 @@
                                 </span>
                             </div>
                         </div>
-
                         @include('boot.layouts.prompt')
                     </div>
                 </div>
@@ -82,17 +59,17 @@
                                 <tr>
                                     <th width="3%"><input type="checkbox" name="chk_all" id="chk_all"/></th>
                                     <th width="5%" class="center"><a
-                                                href="{{ route('category-index', $categoryOrm ->attributes($recover,'sort',$order,$search)) }}">排序</a>
+                                                href="{{ route('category-index', $categoryOrm ->attributes('sort',$order,$search)) }}">排序</a>
                                     </th>
                                     <th width="5%"><a
-                                                href="{{ route('category-index', $categoryOrm ->attributes($recover,'id',$order,$search)) }}">ID</a>
+                                                href="{{ route('category-index', $categoryOrm ->attributes('id',$order,$search)) }}">ID</a>
                                     </th>
                                     <th>分类名称</th>
                                     <th width="15%"><a
-                                                href="{{ route('category-index',$categoryOrm ->attributes($recover,'created_at',$order,$search)) }}">发布时间</a>
+                                                href="{{ route('category-index',$categoryOrm ->attributes('created_at',$order,$search)) }}">发布时间</a>
                                     </th>
                                     <th width="10%"><a
-                                                href="{{ route('category-index',$categoryOrm ->attributes($recover,'status',$order,$search)) }}">状态</a>
+                                                href="{{ route('category-index',$categoryOrm ->attributes('status',$order,$search)) }}">状态</a>
                                     </th>
 
                                     <th width="8%">操作</th>
@@ -115,21 +92,14 @@
                                             <th>{{ $category -> status($category -> status) }}</th>
 
                                             <td>
-                                                @if ($recover == false)
-                                                    <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('category-edit',['id' => $category->id ]) }}"
-                                                       title="编辑">
-                                                        <i class="fa fa-paste"></i>
-                                                    </a>
-                                                @else
-                                                    <a class="btn btn-primary btn-outline btn-xs "
-                                                       href="{{ route('category-restore',['id' => $category -> id]) }}"
-                                                       onclick="return confirm('此操作将恢复此分类下所有被删除的数据,确定恢复?');" title="恢复">
-                                                        <i class="fa fa-undo"></i>
-                                                    </a>
-                                                @endif
+
+                                                <a class="btn btn-primary btn-outline btn-xs "
+                                                   href="{{ route('category-edit',['id' => $category->id ]) }}"
+                                                   title="编辑">
+                                                    <i class="fa fa-paste"></i>
+                                                </a>
                                                 <span>|</span>
-                                                <a href="{{ $recover == false ? route('category-destroy',['id' => $category -> id]) : route('category-ForceDelete',['id' => $category -> id])}}"
+                                                <a href="{{ route('category-destroy',['id' => $category->id ]) }}"
                                                    class="btn btn-warning btn-outline btn-xs delArtciel"
                                                    onclick="return confirm('当前分类下的所有数据都会被删除！！！确定删除?');" title="删除">
                                                     <i class="fa fa-trash-o"></i>
@@ -195,29 +165,6 @@
             }
         }
 
-        //ForceDeleteAll
-        function ForceDeleteAll() {
-            var deleteId = 'null,';
-            $("input[name='chk_list']:checked").each(function (j) {
-                if (j >= 0) {
-                    deleteId += $(this).val() + ",";
-                }
-            });
-
-            if (deleteId == 'null,') {
-                $('.alert.alert-danger').css("display", "block");
-                $('#info').html('暂未选择数据');
-                return false;
-            }
-
-            if (confirm('当前分类下的所有数据都会被删除！！！确定批量删除?')) {
-                window.location.href = "{{ route('category-ForceDelete',['id' => '']) }}/" + deleteId;
-            } else {
-                return false;
-            }
-        }
-
-
         function searchArticle() {
             var search = $('#search').val();
             if (search == '') {
@@ -225,8 +172,7 @@
                 $('#info').html('暂未输入数据');
                 return false;
             }
-
-            window.location.href = "{{ route('category-index') }}/{{ $recover == false ? 0 : 1 }}/0/0/" + search;
+            window.location.href = "{{ route('category-index') }}/0/0/" + search;
         }
     </script>
 @endsection

@@ -242,21 +242,14 @@ class AdvertController extends CommonController
         $builder = Advert::query();
         $builder -> withTrashed();
 
-        //validate category deleted
-        $category = AdvertCategory::withTrashed()->where('id',$builder ->find($id)['category_id'])->first();
 
-        //restore the id advert
-        if ($category -> deleted_at) {
-            $result = ['success' => false, 'msg' => '此分类已被删除，如恢复数据，请先恢复分类'];
+        if ($builder ->restore()){
+            $result = ['success' => true, 'url' => route('advert-index'), 'msg' => '成功'];
 
-        } else {
-            if ($builder ->restore()){
-                $result = ['success' => true, 'url' => route('advert-index'), 'msg' => '成功'];
-
-            }else{
-                $result = ['success' => false, 'url' => route('advert-index'), 'msg' => '恢复失败'];
-            }
+        }else{
+            $result = ['success' => false, 'url' => route('advert-index'), 'msg' => '恢复失败'];
         }
+
 
         return response()->json($result);
     }

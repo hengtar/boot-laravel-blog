@@ -1,6 +1,6 @@
 @extends('boot.layouts.base')
 
-@section('title','添加词库')
+@section('title','添加菜单')
 
 @section('css')
     <link rel="stylesheet" href="/static/boot/css/app.css">

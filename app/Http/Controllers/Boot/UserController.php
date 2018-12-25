@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use App\Models\User;
+use App\Models\Role as RoleModel;
 use Spatie\Permission\Models\Role;
 
 class UserController extends CommonController
@@ -46,7 +47,7 @@ class UserController extends CommonController
 
         return view('boot.user.index', [
             'UserOrm' => new User(),
-            'RoleOrm' => new \App\Models\Role(),
+            'RoleOrm' => new RoleModel(),
             'Users' => $Users,
             'search' => $search,
             'order' => $order,

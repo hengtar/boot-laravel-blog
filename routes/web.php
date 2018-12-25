@@ -69,7 +69,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
     Route::group(['prefix' => 'category',], function () {
 
         //index and recover
-        Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'CategoryController@index')->name('category-index');
+        Route::get('index/{type?}/{order?}/{search?}', 'CategoryController@index')->name('category-index');
 
         //article sort
         Route::post('sort', 'CategoryController@sort')->name('category-sort');
@@ -353,7 +353,7 @@ Route::group(['namespace' => 'Boot', 'prefix' => 'boot','middleware' => ['auth',
     Route::group(['prefix' => 'advertCategory'], function () {
 
         //index and recover
-        Route::get('index/{recover?}/{type?}/{order?}/{search?}', 'AdvertCategoryController@index')->name('advertCategory-index');
+        Route::get('index/{type?}/{order?}/{search?}', 'AdvertCategoryController@index')->name('advertCategory-index');
 
         //article sort
         Route::post('sort', 'AdvertCategoryController@sort')->name('advertCategory-sort');

@@ -26,8 +26,8 @@ class StoreKeyword extends FormRequest
         return [
 
             'keyword' => 'required|max:500',
-            'views' => 'numeric|nullable',
-            'sort' => 'numeric|nullable',
+            'views' => 'numeric|nullable|max:9999999999',
+            'sort' => 'numeric|nullable|max:100',
         ];
     }
 
@@ -38,7 +38,9 @@ class StoreKeyword extends FormRequest
             'keyword.required' => '关键词必填',
             'keyword.max' => '关键词最长为255个字符',
             'views.numeric' => '浏览量必须是数字',
+            'views.max' => '浏览量最大是9999999999',
             'sort.numeric' => '排序必须是数字',
+            'sort.max' => '排序最大是100',
         ];
     }
 

@@ -21,16 +21,11 @@ class CategoryController extends CommonController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($recover = false, $type = null, $order = null, $search = null)
+    public function index($type = null, $order = null, $search = null)
     {
 
         //builder
         $builder = Category::query();
-
-        //recover status
-        if ($recover) {
-            $builder->onlyTrashed();
-        }
 
         //order
         if ($type && $order) {
@@ -45,13 +40,12 @@ class CategoryController extends CommonController
         }
 
         //category value
-        $categorys = $recover || $search ?  $builder->get() : tree($builder->get());
+        $categorys =  $search ?  $builder->get() : tree($builder->get());
 
 
         return view('boot.category.index', [
             'categoryOrm'   => new Category(),
             'categorys'     => $categorys,
-            'recover'       => $recover,
             'search'        => $search,
             'order'         => $order,
             'type'          => $type,
@@ -72,8 +66,7 @@ class CategoryController extends CommonController
                     return redirect()->back()->with('error', '文章ID：' . $key . '排序值错误!');
                 }
 
-
-                Category::withTrashed()->where('id', $key)->update(['sort' => $value]);
+                Category::where('id', $key)->update(['sort' => $value]);
             }
 
             return redirect()->back()->with('success', '排序成功!');
@@ -91,11 +84,8 @@ class CategoryController extends CommonController
      */
     public function create()
     {
-        //all category
-        $category = tree(Category::all('id', 'category','p_id'));
-
         return view('boot.category.create', [
-            'category' => $category,
+            'category' => tree(Category::all('id', 'category','p_id')),
         ]);
     }
 
@@ -182,11 +172,18 @@ class CategoryController extends CommonController
     {
         //format delete id
         $id = FormatDelete($id);
+
         foreach ($id as $value){
 
             if (Category::where('p_id',$value)->first()){
-                return redirect()->back()->with('error', '删除失败！当前ID:' . $value .'还存在下级分类');
-            }else{
+
+                return redirect()->back()->with('error', '当前ID:' . $value .'存在下级分类');
+
+            }elseif (Article::withTrashed()->where('category_id',$value)->first()){
+
+                return redirect()->back()->with('error', '当前分类ID:' . $value .'存在文章');
+
+            } else{
                 // databases operating
                 if (Category::destroy($value)) {
 
@@ -199,53 +196,4 @@ class CategoryController extends CommonController
         }
 
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteForce($id)
-    {
-        try {
-            //format delete id
-            $id = FormatDelete($id);
-
-            // databases operating
-            Category::withTrashed()->whereIn('id', $id)->forceDelete();
-            foreach ($id as  $value) {
-                Article::withTrashed()->where('category_id', $value)->forceDelete();
-            }
-
-            return redirect()->back()->with('success', '永久删除成功！');
-
-        } catch (Exception $e) {
-
-            return redirect()->back()->with('error', '永久删除失败！');
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function restore($id)
-    {
-        //find the id category
-        $article = Category::withTrashed()->find($id);
-
-        //restore the id category
-        if ($article->restore()) {
-            return redirect()->back()->with('success', '恢复成功！');
-
-        } else {
-            return redirect()->back()->with('error', '恢复失败！');
-        }
-    }
-
-
 }
